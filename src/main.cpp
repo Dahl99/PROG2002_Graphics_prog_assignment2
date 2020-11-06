@@ -21,8 +21,6 @@
 #include "framework/shader.hpp"
 #include "framework/texture.hpp"
 #include "framework/renderer.hpp"
-#include "pacman.hpp"
-#include "ghost.hpp"
 
 // Function declarations
 GLFWwindow* initWindow();
@@ -48,6 +46,106 @@ MessageCallback(GLenum source,
 //                                     Main
 //------------------------------------------------------------------------------------
 
+int main() 
+{
+    glfwSetErrorCallback(GLFWErrorCallback);
+
+    auto window = initWindow();
+    if (window == nullptr)
+    {
+        glfwTerminate();
+        std::cin.get();
+        return EXIT_FAILURE;
+    }
+
+    // Enable capture of debug output.
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(MessageCallback, 0);
+
+    // Print OpenGL data
+    std::cout << "Vendor: " << glGetString(GL_VENDOR) << "\n";
+    std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
+
+    // Clear the background
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Enabling blending
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
+    // Initializing music
+    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
+    static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
+    music->setVolume(framework::MUSICVOLUME);
+
+
+    // Reading and creating the map
+    framework::Map map1(framework::LEVELPATH0);
+    map1.PrintMap();
+
+    // Getting the map data
+    framework::ShaderVertData vertices = map1.retMapVertices();
+    std::vector<GLuint> wallIndices = map1.retMapIndices(map1.GetNumWalls());
+    std::vector<GLuint> collIndices = map1.retMapIndices(map1.GetNumCollecs());
+
+    static framework::Renderer renderer;
+
+    framework::VertexArray tileVao;               // Create a vertex array
+    framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
+
+    framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
+    vbl.Push<GLfloat>(2);                         // Adding position floats to layout
+    vbl.Push<GLfloat>(3);                         // Adding color floats to layout
+    vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
+
+    tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
+    framework::IndexBuffer tileIbo(wallIndices);
+
+
+    //                      Preparing collectibles
+
+    framework::VertexArray collVao;
+    framework::VertexBuffer collVbo(vertices.collectibleVertices);
+    collVao.AddBuffer(collVbo, vbl);
+    framework::IndexBuffer collIbo(collIndices);
+
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.0f));
+    glm::mat4 projection = glm::ortho(0.0f, 28.0f, 0.0f, 36.0f, -1.0f, 1.0f);
+
+
+    // Initializing shaders, setting projection matrix and texture for entities
+
+    framework::Shader tileShader(framework::TILEVERTSHADERPATH, framework::TILEFRAGSHADERPATH);
+    tileShader.Bind();
+    tileShader.SetUniformMat4f("u_Projection", projection);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        //                   Preparation
+        glfwPollEvents();
+
+        renderer.Clear();   // Clearing screen
+
+
+        //                              Draw calls
+
+        renderer.Draw(tileVao, tileIbo, tileShader);    // Drawing map
+        collVbo.UpdateData(vertices.collectibleVertices);
+        renderer.Draw(collVao, collIbo, tileShader);
+
+        glfwSwapBuffers(window);
+
+        // Exit the loop if escape is pressed
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) break;
+    }
+
+    glfwTerminate();
+
+    return EXIT_SUCCESS;
+}
+
+/*
 int main(void)
 {
 
@@ -317,6 +415,8 @@ int main(void)
 
     return EXIT_SUCCESS;
 }
+
+*/
 
 //------------------------------------------------------------------------------------------
 //                                  Functions

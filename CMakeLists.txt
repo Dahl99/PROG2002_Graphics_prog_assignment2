@@ -39,12 +39,6 @@ set_target_properties(irrKlang PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRE
 add_executable(Assignment1
 	src/main.cpp
 
-	src/pacman.hpp
-	src/pacman.cpp
-
-	src/ghost.hpp
-	src/ghost.cpp
-	
 	src/framework/shader.hpp
 	src/framework/shader.cpp
 
