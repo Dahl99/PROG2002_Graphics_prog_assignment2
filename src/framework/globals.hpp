@@ -28,13 +28,18 @@ namespace framework {
 //-------------------------------------------------------------------------------------
 
 	struct Vertex {
-		glm::vec2 pos;
+		glm::vec3 pos;
+		glm::vec3 nor;
 		glm::vec3 col;
 		glm::vec2 tex;
 	};
 
 	struct Tile {
 		Vertex botLeft, botRight, topLeft, topRight;
+	};
+
+	struct Cube {
+		Tile top, bottom;
 	};
 
 	struct ShaderVertData {
