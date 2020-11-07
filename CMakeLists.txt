@@ -16,6 +16,7 @@ find_package(glm REQUIRED)
 add_subdirectory(external/glfw-3.3.2)
 add_subdirectory(external/glew-cmake-2.1.0)
 add_subdirectory(external/stb)
+add_subdirectory(external/tiny_obj_loader)
 
 add_library(irrKlang SHARED IMPORTED)
 if (WIN32)
@@ -104,6 +105,7 @@ target_link_libraries(Assignment1
 	glfw
 	glm::glm
 	stbimage::stbimage
+	tinyobj::tinyobj
 	irrKlang
 	OpenGL::GL)
 
