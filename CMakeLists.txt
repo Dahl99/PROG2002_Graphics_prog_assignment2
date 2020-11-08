@@ -66,8 +66,8 @@ add_executable(Assignment1
 	src/framework/entity.hpp
 	src/framework/entity.cpp
 
-	src/framework/mesh.hpp
-	src/framework/mesh.cpp
+	src/framework/model.hpp
+	src/framework/model.cpp
 	
 	src/framework/globals.hpp
 	
