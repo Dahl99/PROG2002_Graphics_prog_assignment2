@@ -21,6 +21,7 @@
 #include "framework/shader.hpp"
 #include "framework/texture.hpp"
 #include "framework/renderer.hpp"
+#include "framework/entity.hpp"
 
 // Function declarations
 GLFWwindow* initWindow();
@@ -68,7 +69,7 @@ int main()
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
     // Clear the background
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.4f, 0.0f, 0.4f, 1.0f);
 
     // Enabling blending
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -81,13 +82,13 @@ int main()
 
 
     // Reading and creating the map
-    framework::Map map1(framework::LEVELPATH0);
-    map1.PrintMap();
+    //framework::Map map1(framework::LEVELPATH0);
+    //map1.PrintMap();
 
-    // Getting the map data
-    framework::ShaderVertData vertices = map1.retMapVertices();
-    std::vector<GLuint> wallIndices = map1.retMapIndices(map1.GetNumWalls());
-    std::vector<GLuint> collIndices = map1.retMapIndices(map1.GetNumCollecs());
+    //// Getting the map data
+    //framework::ShaderVertData vertices = map1.retMapVertices();
+    //std::vector<GLuint> wallIndices = map1.retMapIndices(map1.GetNumWalls());
+    //std::vector<GLuint> collIndices = map1.retMapIndices(map1.GetNumCollecs());
 
     static framework::Renderer renderer;
 
@@ -95,34 +96,40 @@ int main()
     static GLfloat dt, curTime, lastTime;
     dt = curTime = lastTime = 0.0f;
 
-    framework::VertexArray tileVao;               // Create a vertex array
-    framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
+    //framework::VertexArray tileVao;               // Create a vertex array
+    //framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
 
-    framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
-    vbl.Push<GLfloat>(2);                         // Adding position floats to layout
-    vbl.Push<GLfloat>(3);                         // Adding color floats to layout
-    vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
+    //framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
+    //vbl.Push<GLfloat>(3);                         // Adding position floats to layout
+    //vbl.Push<GLfloat>(3);                         // Adding color floats to layout
+    //vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
 
-    tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
-    framework::IndexBuffer tileIbo(wallIndices);
+    //tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
+    //framework::IndexBuffer tileIbo(wallIndices);
 
 
     //                      Preparing collectibles
 
-    framework::VertexArray collVao;
+    /*framework::VertexArray collVao;
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
-    framework::IndexBuffer collIbo(collIndices);
+    framework::IndexBuffer collIbo(collIndices);*/
 
-    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.0f));
-    glm::mat4 projection = glm::ortho(0.0f, 28.0f, 0.0f, 36.0f, -1.0f, 1.0f);
+    framework::Shader charShader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
+    framework::Texture pacTexture(framework::PACMANPICTUREPATH);
+    pacTexture.Bind(0);
+
+    framework::Entity pacman(glm::vec3(1.0f, 0.0f, 1.0f), framework::PACMANMODELPATH);
+
+    /*glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.0f));
+    glm::mat4 projection = glm::ortho(0.0f, 28.0f, 0.0f, 36.0f, -1.0f, 1.0f);*/
 
 
     // Initializing shaders, setting projection matrix and texture for entities
 
-    framework::Shader tileShader(framework::TILEVERTSHADERPATH, framework::TILEFRAGSHADERPATH);
+    /*framework::Shader tileShader(framework::TILEVERTSHADERPATH, framework::TILEFRAGSHADERPATH);
     tileShader.Bind();
-    tileShader.SetUniformMat4f("u_Projection", projection);
+    tileShader.SetUniformMat4f("u_Projection", projection);*/
 
     while (!glfwWindowShouldClose(window))
     {
@@ -135,9 +142,30 @@ int main()
 
         //                              Draw calls
 
-        renderer.Draw(tileVao, tileIbo, tileShader);    // Drawing map
-        collVbo.UpdateData(vertices.collectibleVertices);
-        renderer.Draw(collVao, collIbo, tileShader);
+        //renderer.Draw(tileVao, tileIbo, tileShader);    // Drawing map
+        //collVbo.UpdateData(vertices.collectibleVertices);
+        //renderer.Draw(collVao, collIbo, tileShader);
+
+        // Move forward
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            pacman.UpdatePos(dt, framework::Direction::FORWARD);
+        }
+        // Move backward
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            pacman.UpdatePos(dt, framework::Direction::BACK);
+        }
+        // Strafe right
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+            pacman.UpdatePos(dt, framework::Direction::RIGHT);
+        }
+        // Strafe left
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+            pacman.UpdatePos(dt, framework::Direction::LEFT);
+        }
+
+
+
+        pacman.Draw(charShader);
 
         glfwSwapBuffers(window);
 
@@ -222,33 +250,33 @@ void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt)
 //  the correct data and removes the 4 vertices from that one;
 bool removeCollectible(std::vector<framework::Vertex> &collectibles, int xPos, int yPos)
 {
-    // Goes through every collectible
-    for (int i = 0; i < collectibles.size(); i+=4)
-    {
-        glm::vec2 position = collectibles[i].pos;
-        int x = position.x, y = position.y;
-        
-        // If position is the same as player and not black, paint it black
-        if (x == xPos && y == yPos && collectibles[i].col.x != 0)
-        {
-            collectibles[i].col.x = 0;
-            collectibles[i].col.y = 0;
-            collectibles[i].col.z = 0;
-            
-            collectibles[(i + 1)].col.x = 0;
-            collectibles[(i + 1)].col.y = 0;
-            collectibles[(i + 1)].col.z = 0;
-            
-            collectibles[(i + 2)].col.x = 0;
-            collectibles[(i + 2)].col.y = 0;
-            collectibles[(i + 2)].col.z = 0;
-            
-            collectibles[(i + 3)].col.x = 0;
-            collectibles[(i + 3)].col.y = 0;
-            collectibles[(i + 3)].col.z = 0;
-            return 1;
-        }
-    }
+    //// Goes through every collectible
+    //for (int i = 0; i < collectibles.size(); i+=4)
+    //{
+    //    glm::vec2 position = collectibles[i].pos;
+    //    int x = position.x, y = position.y;
+    //    
+    //    // If position is the same as player and not black, paint it black
+    //    if (x == xPos && y == yPos && collectibles[i].col.x != 0)
+    //    {
+    //        collectibles[i].col.x = 0;
+    //        collectibles[i].col.y = 0;
+    //        collectibles[i].col.z = 0;
+    //        
+    //        collectibles[(i + 1)].col.x = 0;
+    //        collectibles[(i + 1)].col.y = 0;
+    //        collectibles[(i + 1)].col.z = 0;
+    //        
+    //        collectibles[(i + 2)].col.x = 0;
+    //        collectibles[(i + 2)].col.y = 0;
+    //        collectibles[(i + 2)].col.z = 0;
+    //        
+    //        collectibles[(i + 3)].col.x = 0;
+    //        collectibles[(i + 3)].col.y = 0;
+    //        collectibles[(i + 3)].col.z = 0;
+    //        return 1;
+    //    }
+    //}
     return 0;
 }
 

@@ -6,7 +6,8 @@ namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
 
-	const std::string PACMANPICTUREPATH = "../res/assets/pacman.png";
+	const std::string PACMANPICTUREPATH = "../res/models/yellow.png";
+	const std::string PACMANMODELPATH = "../res/models/low_poly_sphere.obj";
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
@@ -28,9 +29,16 @@ namespace framework {
 //-------------------------------------------------------------------------------------
 
 	struct Vertex {
-		glm::vec2 pos;
-		glm::vec3 col;
+		glm::vec3 pos;
+		glm::vec3 nor;
 		glm::vec2 tex;
+
+		bool operator==(const Vertex& other) const
+		{
+			return (pos == other.pos
+				&& nor == other.nor
+				&& tex == other.tex);
+		}
 	};
 
 	struct Tile {

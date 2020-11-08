@@ -9,12 +9,13 @@
 #include "vbo.hpp"
 #include "ibo.hpp"
 #include "shader.hpp"
+#include "model.hpp"
 
 namespace framework {
 	enum class Direction	// Enum class used for direction
 	{
-		UP = 0,
-		DOWN = 2,
+		FORWARD = 0,
+		BACK = 2,
 		RIGHT = 1,
 		LEFT = 3
 	};
@@ -22,16 +23,19 @@ namespace framework {
 	class Entity 
 	{
 	private:
-		glm::vec3 pos, col;
+		glm::vec3 pos;
 		GLfloat mvSpeed;
 		GLboolean isVulnerable;
 
 		std::unique_ptr<VertexArray> vao;
 		std::unique_ptr<VertexBuffer> vbo;
 		std::unique_ptr<IndexBuffer> ibo;
+
+		std::unique_ptr<Model> model;
 	
 	public:
 		Entity(glm::vec3 pos, std::vector<Vertex>& vertices, std::vector<GLuint>& indices);
+		Entity(glm::vec3 pos, const std::string& filepath);
 
 		void Draw(Shader& shader) const;						// Draws entity onto screen
 		void UpdatePos(const GLfloat& dt, const Direction& dir);	// Updates entity position
