@@ -147,19 +147,19 @@ int main()
         //renderer.Draw(collVao, collIbo, tileShader);
 
         // Move forward
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             pacman.UpdatePos(dt, framework::Direction::FORWARD);
         }
         // Move backward
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             pacman.UpdatePos(dt, framework::Direction::BACK);
         }
         // Strafe right
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             pacman.UpdatePos(dt, framework::Direction::RIGHT);
         }
         // Strafe left
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             pacman.UpdatePos(dt, framework::Direction::LEFT);
         }
 
