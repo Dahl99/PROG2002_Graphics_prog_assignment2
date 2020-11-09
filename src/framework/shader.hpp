@@ -22,7 +22,7 @@ namespace framework
 
 		//				Functions for setting uniforms
 		void SetUniform1i(const std::string& name, int value);
-		void SetUniform2fv(const std::string& name, const float texPos[2]);
+		void SetUniform2fv(const std::string& name, const float values[2]);
 		void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 		GLint getUniformLocation(const std::string& name);
 
