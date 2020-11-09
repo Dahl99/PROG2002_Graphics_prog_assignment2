@@ -194,7 +194,7 @@ namespace framework {
 				// Top bottom right vertex
 				map[i - 1].top.botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].top.botRight.pos.y = (yPos)+COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.botRight.pos.z = 1;
 				map[i - 1].top.botRight.col.x = 1.0f;
 				map[i - 1].top.botRight.col.y = 1.0f;
 				map[i - 1].top.botRight.col.z = 1.0f;
@@ -202,7 +202,7 @@ namespace framework {
 				// Top top left vertex
 				map[i - 1].top.topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
 				map[i - 1].top.topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topLeft.pos.z = 1;
 				map[i - 1].top.topLeft.col.x = 1.0f;
 				map[i - 1].top.topLeft.col.y = 1.0f;
 				map[i - 1].top.topLeft.col.z = 1.0f;
@@ -210,7 +210,7 @@ namespace framework {
 				// Top top right vertex
 				map[i - 1].top.topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].top.topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topRight.pos.z = 1;
 				map[i - 1].top.topRight.col.x = 1.0f;
 				map[i - 1].top.topRight.col.y = 1.0f;
 				map[i - 1].top.topRight.col.z = 1.0f;
@@ -226,7 +226,7 @@ namespace framework {
 				// Bottom bottom right vertex
 				map[i - 1].bottom.botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].bottom.botRight.pos.y = (yPos)+COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.botRight.pos.z = 0;
 				map[i - 1].bottom.botRight.col.x = 1.0f;
 				map[i - 1].bottom.botRight.col.y = 1.0f;
 				map[i - 1].bottom.botRight.col.z = 1.0f;
@@ -234,7 +234,7 @@ namespace framework {
 				// Bottom top left vertex
 				map[i - 1].bottom.topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
 				map[i - 1].bottom.topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topLeft.pos.z = 0;
 				map[i - 1].bottom.topLeft.col.x = 1.0f;
 				map[i - 1].bottom.topLeft.col.y = 1.0f;
 				map[i - 1].bottom.topLeft.col.z = 1.0f;
@@ -242,7 +242,7 @@ namespace framework {
 				// Bottom top right vertex
 				map[i - 1].bottom.topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].bottom.topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topRight.pos.z = 0;
 				map[i - 1].bottom.topRight.col.x = 1.0f;
 				map[i - 1].bottom.topRight.col.y = 1.0f;
 				map[i - 1].bottom.topRight.col.z = 1.0f;
@@ -260,7 +260,7 @@ namespace framework {
 				// Top bottom right vertex
 				map[i - 1].top.botRight.pos.x = ((i - 1) % sizeX) + 1;
 				map[i - 1].top.botRight.pos.y = yPos;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.botRight.pos.z = 1;
 				map[i - 1].top.botRight.col.x = 0.0f;
 				map[i - 1].top.botRight.col.y = 0.0f;
 				map[i - 1].top.botRight.col.z = 0.6f;
@@ -268,7 +268,7 @@ namespace framework {
 				// Top top left vertex
 				map[i - 1].top.topLeft.pos.x = (i - 1) % sizeX;
 				map[i - 1].top.topLeft.pos.y = yPos + 1;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topLeft.pos.z = 1;
 				map[i - 1].top.topLeft.col.x = 0.0f;
 				map[i - 1].top.topLeft.col.y = 0.0f;
 				map[i - 1].top.topLeft.col.z = 0.6f;
@@ -276,11 +276,10 @@ namespace framework {
 				// Top top right vertex
 				map[i - 1].top.topRight.pos.x = ((i - 1) % sizeX) + 1;
 				map[i - 1].top.topRight.pos.y = yPos + 1;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topRight.pos.z = 1;
 				map[i - 1].top.topRight.col.x = 0.0f;
 				map[i - 1].top.topRight.col.y = 0.0f;
 				map[i - 1].top.topRight.col.z = 0.6f;
-				break;
 
 				// Bottom bottom left vertex
 				map[i - 1].bottom.botLeft.pos.x = (i - 1) % sizeX;
@@ -293,7 +292,7 @@ namespace framework {
 				// Bottom bottom right vertex
 				map[i - 1].bottom.botRight.pos.x = ((i - 1) % sizeX) + 1;
 				map[i - 1].bottom.botRight.pos.y = yPos;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.botRight.pos.z = 0;
 				map[i - 1].bottom.botRight.col.x = 0.0f;
 				map[i - 1].bottom.botRight.col.y = 0.0f;
 				map[i - 1].bottom.botRight.col.z = 0.6f;
@@ -301,7 +300,7 @@ namespace framework {
 				// Bottom top left vertex
 				map[i - 1].bottom.topLeft.pos.x = (i - 1) % sizeX;
 				map[i - 1].bottom.topLeft.pos.y = yPos + 1;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topLeft.pos.z = 0;
 				map[i - 1].bottom.topLeft.col.x = 0.0f;
 				map[i - 1].bottom.topLeft.col.y = 0.0f;
 				map[i - 1].bottom.topLeft.col.z = 0.6f;
@@ -309,7 +308,7 @@ namespace framework {
 				// Bottom top right vertex
 				map[i - 1].bottom.topRight.pos.x = ((i - 1) % sizeX) + 1;
 				map[i - 1].bottom.topRight.pos.y = yPos + 1;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topRight.pos.z = 0;
 				map[i - 1].bottom.topRight.col.x = 0.0f;
 				map[i - 1].bottom.topRight.col.y = 0.0f;
 				map[i - 1].bottom.topRight.col.z = 0.6f;
@@ -330,7 +329,7 @@ namespace framework {
 				// Top bottom right vertex
 				map[i - 1].top.botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].top.botRight.pos.y = (yPos)+COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.botRight.pos.z = 1;
 				map[i - 1].top.botRight.col.x = 1.0f;
 				map[i - 1].top.botRight.col.y = 1.0f;
 				map[i - 1].top.botRight.col.z = 1.0f;
@@ -338,7 +337,7 @@ namespace framework {
 				// Top top left vertex
 				map[i - 1].top.topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
 				map[i - 1].top.topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topLeft.pos.z = 1;
 				map[i - 1].top.topLeft.col.x = 1.0f;
 				map[i - 1].top.topLeft.col.y = 1.0f;
 				map[i - 1].top.topLeft.col.z = 1.0f;
@@ -346,7 +345,7 @@ namespace framework {
 				// Top top right vertex
 				map[i - 1].top.topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].top.topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].top.botLeft.pos.z = 1;
+				map[i - 1].top.topRight.pos.z = 1;
 				map[i - 1].top.topRight.col.x = 1.0f;
 				map[i - 1].top.topRight.col.y = 1.0f;
 				map[i - 1].top.topRight.col.z = 1.0f;
@@ -362,7 +361,7 @@ namespace framework {
 				// Bottom bottom right vertex
 				map[i - 1].bottom.botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].bottom.botRight.pos.y = (yPos)+COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.botRight.pos.z = 0;
 				map[i - 1].bottom.botRight.col.x = 1.0f;
 				map[i - 1].bottom.botRight.col.y = 1.0f;
 				map[i - 1].bottom.botRight.col.z = 1.0f;
@@ -370,7 +369,7 @@ namespace framework {
 				// Bottom top left vertex
 				map[i - 1].bottom.topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
 				map[i - 1].bottom.topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topLeft.pos.z = 0;
 				map[i - 1].bottom.topLeft.col.x = 1.0f;
 				map[i - 1].bottom.topLeft.col.y = 1.0f;
 				map[i - 1].bottom.topLeft.col.z = 1.0f;
@@ -378,7 +377,7 @@ namespace framework {
 				// Bottom top right vertex
 				map[i - 1].bottom.topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				map[i - 1].bottom.topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
-				map[i - 1].bottom.botLeft.pos.z = 0;
+				map[i - 1].bottom.topRight.pos.z = 0;
 				map[i - 1].bottom.topRight.col.x = 1.0f;
 				map[i - 1].bottom.topRight.col.y = 1.0f;
 				map[i - 1].bottom.topRight.col.z = 1.0f;
