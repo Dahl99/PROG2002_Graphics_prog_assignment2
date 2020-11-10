@@ -17,7 +17,7 @@ namespace framework
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);	//	Binding buffer object
 
 		//	creating and initializing buffer object's data store
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Count * sizeof(GLuint), data.data(), GL_STATIC_DRAW);
 	}
 
 	IndexBuffer::~IndexBuffer()
