@@ -23,7 +23,7 @@ namespace framework {
 	class Entity 
 	{
 	private:
-		glm::vec3 pos;
+		glm::vec3 position, rotation, scale;
 		GLfloat mvSpeed;
 		GLboolean isVulnerable;
 
@@ -35,12 +35,16 @@ namespace framework {
 	
 	public:
 		Entity(glm::vec3 pos, std::vector<Vertex>& vertices, std::vector<GLuint>& indices);
-		Entity(glm::vec3 pos, const std::string& filepath);
+		Entity(glm::vec3 pos, const std::string& modelpath);
 
-		void Draw(Shader& shader) const;						// Draws entity onto screen
-		void UpdatePos(const GLfloat& dt, const Direction& dir);	// Updates entity position
-		inline glm::vec3 GetPos() const { return pos; };		// Fetches the position of entity
-		void ModPos(int loc) { pos.x = loc; };
+		inline void SetRotation(glm::vec3 rotation) { this->rotation = rotation; }	// Setter for rotation vector
+		inline void SetScale(glm::vec3 scale) { this->scale = scale; }				// Setter for scale vector
+
+		inline glm::vec3 GetPosition() const { return position; };					// Getter for position vector
+		inline void SetPosition(glm::vec3 position) { this->position = position; }	// Setter for position vector
+
+		void UpdatePos(const GLfloat& dt, const Direction& direction);		// Updates entity position based on delta time and direction
+		void ModPos(int loc) { position.x = loc; };
+		void Draw(Shader& shader) const;									// Draws entity onto screen
 	};
-
 }
