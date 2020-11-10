@@ -14,13 +14,13 @@ namespace framework
 		GLuint m_Count;			//	Number of indices
 
 	public:
-		IndexBuffer(const GLuint* data, GLuint count);		//	Generating, bindingand buffering vbo
-		IndexBuffer(const std::vector<GLuint> &data);		//	Generating, bindingand buffering vbo
-		~IndexBuffer();										//	Deletes vbo
+		IndexBuffer(const GLuint* data, GLuint count);		//	Generating, binding and buffering ibo
+		IndexBuffer(const std::vector<GLuint> &data);		//	Generating, binding and buffering ibo
+		~IndexBuffer();										//	Deletes ibo
 
-		void Bind() const;									//	Binds the ib
-		void Unbind() const;								//	Unbinds the ib
+		void Bind() const;									//	Binds the index buffer
+		void Unbind() const;								//	Unbinds the index buffer
 
-		inline GLuint GetCount() const { return m_Count; }	//	Returns number of indices
+		inline GLuint GetCount() const { return m_Count; }	//	Getter for number of indices
 	};
 }
