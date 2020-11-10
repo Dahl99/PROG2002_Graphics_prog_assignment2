@@ -85,11 +85,6 @@ int main()
     //framework::Map map1(framework::LEVELPATH0);
     //map1.PrintMap();
 
-    //// Getting the map data
-    //framework::ShaderVertData vertices = map1.retMapVertices();
-    //std::vector<GLuint> wallIndices = map1.retMapIndices(map1.GetNumWalls());
-    //std::vector<GLuint> collIndices = map1.retMapIndices(map1.GetNumCollecs());
-
     static framework::Renderer renderer;
 
     // Variables used to find delta time
@@ -116,20 +111,22 @@ int main()
     framework::IndexBuffer collIbo(collIndices);*/
 
     framework::Shader charShader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
-    framework::Texture pacTexture(framework::PACMANPICTUREPATH);
-    pacTexture.Bind(0);
 
-    framework::Entity pacman(glm::vec3(1.0f, 0.0f, 1.0f), framework::PACMANMODELPATH);
+    framework::Texture pacTex(framework::PACMANPICTUREPATH);
+    pacTex.Bind(0);
 
-    /*glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.8f, 0.8f, 0.0f));
-    glm::mat4 projection = glm::ortho(0.0f, 28.0f, 0.0f, 36.0f, -1.0f, 1.0f);*/
+    framework::Texture ghostTex(framework::GHOSTPICTUREPATH);
+    ghostTex.Bind(1);
 
+    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 5.0f), framework::PACMANMODELPATH);
 
-    // Initializing shaders, setting projection matrix and texture for entities
-
-    /*framework::Shader tileShader(framework::TILEVERTSHADERPATH, framework::TILEFRAGSHADERPATH);
-    tileShader.Bind();
-    tileShader.SetUniformMat4f("u_Projection", projection);*/
+    std::vector<std::shared_ptr<framework::Entity>> ghosts;
+    for (int i = 0; i < 4; i++)
+    {
+        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, 0.0f), framework::GHOSTMODELPATH);
+        ghost->SetScale(glm::vec3(0.01f));
+        ghosts.push_back(ghost);
+    }
 
     while (!glfwWindowShouldClose(window))
     {
@@ -164,8 +161,14 @@ int main()
         }
 
 
-
+        charShader.SetUniform1i("numTex", 0);
+        pacTex.Bind(0);
         pacman.Draw(charShader);
+
+        ghostTex.Bind(1);
+        charShader.SetUniform1i("numTex", 1);
+        for (const auto& ghost : ghosts)
+            ghost->Draw(charShader);
 
         glfwSwapBuffers(window);
 
