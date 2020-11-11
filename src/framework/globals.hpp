@@ -1,13 +1,18 @@
 #pragma once
 #include <string>
 #include <glm/glm.hpp>
+#include <memory>
 #include <vector>
+
 namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
 
 	const std::string PACMANPICTUREPATH = "../res/models/yellow.png";
 	const std::string PACMANMODELPATH = "../res/models/low_poly_sphere.obj";
+
+	const std::string WALLPICTUREPATH = "../res/models/cube/cubetexture.png";
+	const std::string WALLMODELPATH = "../res/models/cube/cube.obj";
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";

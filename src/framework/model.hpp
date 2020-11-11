@@ -15,7 +15,7 @@ namespace framework
 	public:
 		Model(const std::string& filepath);
 
-		inline auto GetVertices() const { return m_Vertices; }
-		inline auto GetIndices() const { return m_Indices; }
+		inline std::vector<Vertex> GetVertices() { return m_Vertices; }
+		inline std::vector<uint32_t> GetIndices()  { return m_Indices; }
 	};
 }

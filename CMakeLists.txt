@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(Assignment1)
+project(Assignment2)
 
 find_package(OpenGL REQUIRED)
 
@@ -37,7 +37,7 @@ set_target_properties(irrKlang PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(irrKlang PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_executable(Assignment1
+add_executable(Assignment2
 	src/main.cpp
 
 	src/framework/shader.hpp
@@ -89,7 +89,7 @@ add_executable(Assignment1
     external/imgui/imgui_widgets.cpp)
 
 
-target_compile_definitions(Assignment1 PRIVATE GLEW_STATIC)
+target_compile_definitions(Assignment2 PRIVATE GLEW_STATIC)
 
 # Set include directories
 target_include_directories(
@@ -103,7 +103,7 @@ target_include_directories(
 )
 
 
-target_link_libraries(Assignment1
+target_link_libraries(Assignment2
 	libglew_static
 	glfw
 	glm::glm
