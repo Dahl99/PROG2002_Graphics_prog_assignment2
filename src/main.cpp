@@ -71,10 +71,6 @@ int main()
     // Clear the background
     glClearColor(0.4f, 0.0f, 0.4f, 1.0f);
 
-    // Enabling blending
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
     // Initializing music
     /*static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
     static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
@@ -86,6 +82,8 @@ int main()
     //map1.PrintMap();
 
     static framework::Renderer renderer;
+    renderer.EnableBlending();
+    renderer.EnableDepthTesting();
 
     // Variables used to find delta time
     static GLfloat dt, curTime, lastTime;
