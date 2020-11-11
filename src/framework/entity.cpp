@@ -4,7 +4,7 @@
 namespace framework 
 {
 	Entity::Entity(glm::vec3 position, std::vector<Vertex>& vertices, std::vector<GLuint>& indices) 
-		: position(position), scale(glm::vec3(1.f)), mvSpeed(5.0f), isVulnerable(GL_TRUE)
+		: position(position), rotationAxis(glm::vec3(0.f)), scale(glm::vec3(1.f)), mvSpeed(5.0f), rotation(0.f), isVulnerable(GL_TRUE)
 	{
 		vao = std::make_unique<VertexArray>();			// Initializing vao
 		vbo = std::make_unique<VertexBuffer>(vertices); // Initializing vbo
@@ -19,7 +19,7 @@ namespace framework
 	}
 
 	Entity::Entity(glm::vec3 position, const std::string& modelpath) 
-		: position(position), scale(glm::vec3(1.f)), mvSpeed(5.0f), isVulnerable(GL_TRUE)
+		: position(position), rotationAxis(glm::vec3(0.f)), scale(glm::vec3(1.f)), mvSpeed(5.0f), rotation(0.f), isVulnerable(GL_TRUE)
 	{
 		model = std::make_unique<Model>(modelpath);					// Initializing model
 
@@ -35,7 +35,7 @@ namespace framework
 		vao->AddBuffer(*vbo, vbl);					// Populating the vertex buffer
 	}
 
-	void Entity::Draw(Shader& shader) const
+	void Entity::Draw(Shader& shader, glm::mat4& view, glm::mat4& proj) const
 	{
 		shader.Bind();
 		vao->Bind();
@@ -44,10 +44,8 @@ namespace framework
 
 		// Setting the model matrix
 		auto model = glm::translate(glm::mat4(1.f), position);
-		model = glm::rotate(model, glm::radians(0.f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, scale);
-		auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
-		auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 		// Passing Model, View and Projection matrices to shader
 		shader.SetUniformMat4f("u_Model", model);

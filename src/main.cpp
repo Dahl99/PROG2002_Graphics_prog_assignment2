@@ -158,15 +158,17 @@ int main()
             pacman.UpdatePos(dt, framework::Direction::LEFT);
         }
 
+        auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+        auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
         charShader.SetUniform1i("numTex", 0);
         pacTex.Bind(0);
-        pacman.Draw(charShader);
+        pacman.Draw(charShader, view, proj);
 
         ghostTex.Bind(1);
         charShader.SetUniform1i("numTex", 1);
         for (const auto& ghost : ghosts)
-            ghost->Draw(charShader);
+            ghost->Draw(charShader, view, proj);
 
         glfwSwapBuffers(window);
 
