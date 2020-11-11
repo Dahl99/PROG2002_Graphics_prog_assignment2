@@ -70,8 +70,8 @@ int main()
 
 
     // Reading and creating the map
-    //framework::Map map1(framework::LEVELPATH0);
-    //map1.PrintMap();
+    framework::Map map1(framework::LEVELPATH0);
+    map1.PrintMap();
 
     static framework::Renderer renderer;
     renderer.EnableBlending();
@@ -82,16 +82,18 @@ int main()
     static GLfloat dt, curTime, lastTime;
     dt = curTime = lastTime = 0.0f;
 
-    //framework::VertexArray tileVao;               // Create a vertex array
-    //framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
+    framework::ShaderVertData vertices = map1.retMapVertices();
 
-    //framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
-    //vbl.Push<GLfloat>(3);                         // Adding position floats to layout
-    //vbl.Push<GLfloat>(3);                         // Adding color floats to layout
-    //vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
+    framework::VertexArray tileVao;               // Create a vertex array
+    framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
 
-    //tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
-    //framework::IndexBuffer tileIbo(wallIndices);
+    framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
+    vbl.Push<GLfloat>(3);                         // Adding position floats to layout
+    vbl.Push<GLfloat>(3);                         // Adding color floats to layout
+    vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
+
+    tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
+    framework::IndexBuffer tileIbo(map1.retMapIndices(0));
 
 
     //                      Preparing collectibles
@@ -130,7 +132,7 @@ int main()
 
         //                              Draw calls
 
-        //renderer.Draw(tileVao, tileIbo, tileShader);    // Drawing map
+        renderer.Draw(tileVao, tileIbo, charShader);    // Drawing map
         //collVbo.UpdateData(vertices.collectibleVertices);
         //renderer.Draw(collVao, collIbo, tileShader);
 

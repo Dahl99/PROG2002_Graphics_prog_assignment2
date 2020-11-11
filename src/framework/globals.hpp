@@ -14,8 +14,8 @@ namespace framework {
 	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
 	const std::string GHOSTPICTUREPATH = "../res/models/ghosts/ghost_red.png";
 
-	const std::string WALLPICTUREPATH = "../res/models/cube/cubetexture.png";
-	const std::string WALLMODELPATH = "../res/models/cube/cube.obj";
+	const std::string WALLPICTUREPATH = "../res/models/cube/SlimeTexture.png";
+	const std::string WALLMODELPATH = "../res/models/cube/slime.obj";
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";

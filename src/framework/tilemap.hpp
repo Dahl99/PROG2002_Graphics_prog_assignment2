@@ -11,7 +11,7 @@ namespace framework{
 		glm::vec3 pos;
 		glm::vec3 nor;
 
-		std::unique_ptr<framework::Model> model;
+		Model* model;
 	};
 
 

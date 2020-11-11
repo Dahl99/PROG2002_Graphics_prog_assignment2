@@ -70,9 +70,12 @@ namespace framework {
 				temp.pos.z = 0;
 				
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = std::make_unique<Model>(WALLMODELPATH);
+				map[i - 1].model = new Model(WALLMODELPATH);
 
-
+				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				{
+					map[i - 1].model->GetVertices()[j].pos += temp.pos + 0.5f;
+				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				//map[i - 1].botRight.pos.y = (yPos)+COLLECTIBLESIZE;
@@ -93,15 +96,25 @@ namespace framework {
 				
 
 				// Bottom left vertex
-				temp.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				temp.pos.y = (yPos)+COLLECTIBLESIZE;
+				temp.pos.x = ((i - 1) % sizeX);
+				temp.pos.y = (yPos);
 				temp.pos.z = 0;
 
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = std::make_unique<Model>(WALLMODELPATH);
+				map[i - 1].model = new Model(WALLMODELPATH);
+
+				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				{	
+					map[i - 1].model->GetVertices()[j].pos += 0.5f;
+					map[i - 1].model->GetVertices()[j].pos.x += temp.pos.x;
+					map[i - 1].model->GetVertices()[j].pos.y += temp.pos.y;
+					map[i - 1].model->GetVertices()[j].pos.z += temp.pos.z;
+
+				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
 				//map[i - 1].botRight.pos.y = yPos;
+				map[i - 1].model->GetVertices()[2].pos.x = 5;
 
 
 				//// Top left vertex
@@ -127,7 +140,12 @@ namespace framework {
 				playerPos = glm::vec3((float)(i % sizeX), (float)(yPos), 1.0f);
 
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = std::make_unique<Model>(WALLMODELPATH);
+				map[i - 1].model = new Model(WALLMODELPATH);
+
+				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				{
+					map[i - 1].model->GetVertices()[j].pos += temp.pos + 0.5f;
+				}
 
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
@@ -143,9 +161,6 @@ namespace framework {
 				//map[i - 1].topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
 				//map[i - 1].topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
 
-				break;
-			case 3: // Sets ghost position if tile type is 3
-				ghostPos.push_back(glm::vec3((float)(i % sizeX)-1, (float)(yPos), 1.0f));
 				break;
 			default:
 				break;
@@ -183,35 +198,32 @@ namespace framework {
 		std::cout << std::endl;
 	}
 
-	//// Loops through mapsize and puts the data for each tile into one of two vector containers,
-	////  one for walls and one for collectibles
-	//ShaderVertData Map::retMapVertices()
-	//{
-	//	// Creates the return data container
-	//	ShaderVertData mapVertices;
+	// Loops through mapsize and puts the data for each tile into one of two vector containers,
+	//  one for walls and one for collectibles
+	ShaderVertData Map::retMapVertices()
+	{
+		// Creates the return data container
+		ShaderVertData mapVertices;
 
-	//	// Goes through the map and puts each vertice of each tile into either the walls or collectibles container
-	//	for (int i = 0; i < sizeArray; i++)
-	//	{
-	//		if(array[i] && array[i] != 2)
-	//		{
-	//			mapVertices.wallVertices.push_back(map[i].botLeft);
-	//			mapVertices.wallVertices.push_back(map[i].botRight);
-	//			mapVertices.wallVertices.push_back(map[i].topLeft);
-	//			mapVertices.wallVertices.push_back(map[i].topRight);
-	//			numWalls++;
-	//		}
-	//		else
-	//		{
-	//			mapVertices.collectibleVertices.push_back(map[i].botLeft);
-	//			mapVertices.collectibleVertices.push_back(map[i].botRight);
-	//			mapVertices.collectibleVertices.push_back(map[i].topLeft);
-	//			mapVertices.collectibleVertices.push_back(map[i].topRight);
-	//			numCollecs++;
-	//		}
-	//	}
-	//	return mapVertices;
-	//}
+		// Goes through the map and puts each vertice of each tile into either the walls or collectibles container
+		for (int i = 0; i < sizeArray; i++)
+		{
+			if(array[i] && array[i] != 2)
+			{
+				for (int j = 0; j < map[i].model->GetVertices().size(); j++)
+					mapVertices.wallVertices.push_back(map[i].model->GetVertices()[j]);
+				numWalls++;
+			}
+			else
+			{
+				for (int j = 0; j < map[i].model->GetVertices().size(); j++)
+					mapVertices.collectibleVertices.push_back(map[i].model->GetVertices()[j]);
+				auto x = mapVertices.wallVertices.max_size();
+				numCollecs++;
+			}
+		}
+		return mapVertices;
+	}
 
 
 	// Creates the indice arrays for the map
@@ -219,17 +231,33 @@ namespace framework {
 	{
 		// Create the return value container
 		std::vector<GLuint> indices;
+		Model wallmodel = Model(WALLMODELPATH);
+		
+		
+		// Add collectible model later
+		//Model wallmodel = Model(WALLMODELPATH);
+		//for (uint32_t i = 0; i < numCollecs; i++)
+		//{
+		//	for (int j = 0; j < wallmodel.GetIndices().size(); j++)
+		//	{
+		//		indices.push_back(wallmodel.GetIndices()[j] + (i * 8));
+		//	}
+		//}
 
 		// Adds the indices to create the two triangles of each square\
 			the order is 1, 2, 3 and 3, 4, 1 because vertexes are added in botleft, botright, topleft, topright
-		for (GLuint i = 0; i < iterations; i++)
+		for (uint32_t i = 0; i < numWalls; i++)
 		{
-			indices.push_back(i * 4);
+			for (int j = 0; j < wallmodel.GetIndices().size(); j++)
+			{
+				indices.push_back(wallmodel.GetIndices()[j] + (i * 8));
+			}
+			/*indices.push_back(i * 4);
 			indices.push_back((i * 4) + 1);
 			indices.push_back((i * 4) + 2);
 			indices.push_back((i * 4) + 2);
 			indices.push_back((i * 4) + 3);
-			indices.push_back((i * 4) + 1);
+			indices.push_back((i * 4) + 1);*/
 		}		
 		
 		return indices;
