@@ -8,8 +8,11 @@ namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
 
-	const std::string PACMANPICTUREPATH = "../res/models/yellow.png";
-	const std::string PACMANMODELPATH = "../res/models/low_poly_sphere.obj";
+	const std::string PACMANMODELPATH = "../res/models/pacman/pacman.obj";
+	const std::string PACMANPICTUREPATH = "../res/models/pacman/pacman_texture.png";
+	
+	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
+	const std::string GHOSTPICTUREPATH = "../res/models/ghosts/ghost_red.png";
 
 	const std::string WALLPICTUREPATH = "../res/models/cube/cubetexture.png";
 	const std::string WALLMODELPATH = "../res/models/cube/cube.obj";

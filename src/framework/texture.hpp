@@ -14,13 +14,13 @@ namespace framework
 		int w, h, bitsPerPixel;
 
 	public:
-		Texture(const std::string& filepath);
+		Texture(const std::string& filepath, GLboolean flip = true);
 		~Texture();
 
-		void Bind(GLuint slot) const;
-		void Unbind() const;
+		void Bind(GLuint slot) const;				// Binds texture to specified texture slot
+		void Unbind() const;						// Unbinds the texture
 
-		inline int GetWidth() const { return w; }
-		inline int GetHeight() const { return h; }
+		inline int GetWidth() const { return w; }	// Getter for width
+		inline int GetHeight() const { return h; }	// Getter for height
 	};
 }

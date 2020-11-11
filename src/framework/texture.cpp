@@ -3,10 +3,11 @@
 
 namespace framework
 {
-	Texture::Texture(const std::string& filepath)
+	Texture::Texture(const std::string& filepath, GLboolean flip)
 		: m_RendererID(0), filePath(filepath), image(nullptr), w(0), h(0), bitsPerPixel(0)
 	{
-		stbi_set_flip_vertically_on_load(true);
+		stbi_set_flip_vertically_on_load(flip);
+
 		image = stbi_load(filepath.c_str(), &w, &h, &bitsPerPixel, STBI_rgb_alpha);
 
 		glGenTextures(1, &m_RendererID);

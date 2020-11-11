@@ -9,13 +9,14 @@ namespace framework
 	class Model
 	{
 	private:
-		std::vector<Vertex> m_Vertices;
-		std::vector<uint32_t> m_Indices;
+		std::vector<Vertex> m_Vertices;		// Contains vertices loaded from model
+		std::vector<uint32_t> m_Indices;	// Contains indices loaded from model
 
 	public:
-		Model(const std::string& filepath);
+		Model(const std::string& filepath);	// Loads model at filepath
 
-		inline std::vector<Vertex> GetVertices() { return m_Vertices; }
-		inline std::vector<uint32_t> GetIndices()  { return m_Indices; }
+		inline auto GetVertices() const { return m_Vertices; }	// Getter for vertices
+		inline auto GetIndices() const { return m_Indices; }	// Getter for indices
+
 	};
 }
