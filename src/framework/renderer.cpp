@@ -1,7 +1,16 @@
 #include "renderer.hpp"
+#include <iostream>
 
 namespace framework
 {
+	Renderer::Renderer()
+	{
+		// Print OpenGL data
+		std::cout << "Vendor: " << glGetString(GL_VENDOR) << "\n";
+		std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
+		std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
+	}
+
 	void Renderer::Clear() const
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //	Clearing screen
@@ -16,6 +25,11 @@ namespace framework
 	void Renderer::EnableDepthTesting() const
 	{
 		glEnable(GL_DEPTH_TEST);
+	}
+
+	void Renderer::SetClearColor(glm::vec4& clearColor) const
+	{
+		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 	}
 
 	void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ibo, const Shader& shader) const
