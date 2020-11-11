@@ -8,6 +8,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+// Used for caching vertices when loading model
 namespace std {
     template<> struct hash<framework::Vertex> {
         size_t operator()(framework::Vertex const& vertex) const {
@@ -22,6 +23,7 @@ namespace framework
 {
 	Model::Model(const std::string& filepath)
 	{
+        // Variables used for lodaing model
         tinyobj::attrib_t attrib{};
         std::vector<tinyobj::shape_t> shapes{};
         std::vector<tinyobj::material_t> mats{};
@@ -29,6 +31,7 @@ namespace framework
 
         std::unordered_map<Vertex, uint32_t> vertex_cache{};
 
+        // Loading model using tinyobjloader
         if (!tinyobj::LoadObj(&attrib, &shapes, &mats, &error, filepath.c_str()))
             std::cout << "WARNING! Couldn't load model!\n";
 

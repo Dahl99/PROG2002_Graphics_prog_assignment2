@@ -76,9 +76,9 @@ int main()
     glEnable(GL_BLEND);
 
     // Initializing music
-    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
+    /*static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
     static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
-    music->setVolume(framework::MUSICVOLUME);
+    music->setVolume(framework::MUSICVOLUME);*/
 
 
     // Reading and creating the map
@@ -112,19 +112,19 @@ int main()
 
     framework::Shader charShader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
 
-    framework::Texture pacTex(framework::PACMANPICTUREPATH);
+    framework::Texture pacTex(framework::PACMANPICTUREPATH);    // Loading texture for pacman
     pacTex.Bind(0);
 
-    framework::Texture ghostTex(framework::GHOSTPICTUREPATH);
+    framework::Texture ghostTex(framework::GHOSTPICTUREPATH);   // Loading texture for ghost
     ghostTex.Bind(1);
 
-    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 5.0f), framework::PACMANMODELPATH);
+    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 2.0f), framework::PACMANMODELPATH);  // Creating pacman entity with model
 
+    // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 1; i++)
     {
-        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, 0.0f), framework::GHOSTMODELPATH);
-        ghost->SetScale(glm::vec3(0.01f));
+        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, -1.0f), framework::GHOSTMODELPATH);
         ghosts.push_back(ghost);
     }
 
