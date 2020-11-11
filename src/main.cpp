@@ -118,13 +118,13 @@ int main()
     framework::Texture ghostTex(framework::GHOSTPICTUREPATH);   // Loading texture for ghost
     ghostTex.Bind(1);
 
-    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 5.0f), framework::PACMANMODELPATH);  // Creating pacman entity with model
+    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 2.0f), framework::PACMANMODELPATH);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
     for (int i = 0; i < 1; i++)
     {
-        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, 0.0f), framework::GHOSTMODELPATH);
+        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, -1.0f), framework::GHOSTMODELPATH);
         ghosts.push_back(ghost);
     }
 

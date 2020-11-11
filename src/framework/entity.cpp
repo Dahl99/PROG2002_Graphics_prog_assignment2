@@ -46,7 +46,7 @@ namespace framework
 		auto model = glm::translate(glm::mat4(1.f), position);
 		model = glm::rotate(model, glm::radians(0.f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, scale);
-		auto view = glm::lookAt(glm::vec3(8.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+		auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
 		auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 		// Passing Model, View and Projection matrices to shader
