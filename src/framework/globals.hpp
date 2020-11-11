@@ -10,7 +10,10 @@ namespace framework {
 	const std::string PACMANPICTUREPATH = "../res/models/pacman/pacman_texture.png";
 	
 	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
-	const std::string GHOSTPICTUREPATH = "../res/models/ghosts/ghost_red.png";
+	const std::string GHOSTREDPICTUREPATH = "../res/models/ghosts/ghost_red.png";
+	const std::string GHOSTBLUEPICTUREPATH = "../res/models/ghosts/ghost_blue.png";
+	const std::string GHOSTORANGEPICTUREPATH = "../res/models/ghosts/ghost_orange.png";
+	const std::string GHOSTPINKPICTUREPATH = "../res/models/ghosts/ghost_pink.png";
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
