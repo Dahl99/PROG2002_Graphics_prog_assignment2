@@ -76,9 +76,9 @@ int main()
     glEnable(GL_BLEND);
 
     // Initializing music
-    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
+    /*static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
     static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
-    music->setVolume(framework::MUSICVOLUME);
+    music->setVolume(framework::MUSICVOLUME);*/
 
 
     // Reading and creating the map
@@ -124,7 +124,7 @@ int main()
     for (int i = 0; i < 4; i++)
     {
         auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, 0.0f), framework::GHOSTMODELPATH);
-        ghost->SetScale(glm::vec3(0.01f));
+        //ghost->SetScale(glm::vec3(0.01f));
         ghosts.push_back(ghost);
     }
 
