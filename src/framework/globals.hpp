@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <glm/glm.hpp>
+#include <memory>
 #include <vector>
+
 namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
@@ -14,6 +16,9 @@ namespace framework {
 	const std::string GHOSTBLUEPICTUREPATH = "../res/models/ghosts/ghost_blue.png";
 	const std::string GHOSTORANGEPICTUREPATH = "../res/models/ghosts/ghost_orange.png";
 	const std::string GHOSTPINKPICTUREPATH = "../res/models/ghosts/ghost_pink.png";
+
+	const std::string WALLPICTUREPATH = "../res/models/cube/SlimeTexture.png";
+	const std::string WALLMODELPATH = "../res/models/cube/slime.obj";
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
