@@ -63,18 +63,10 @@ int main()
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(MessageCallback, 0);
 
-    // Print OpenGL data
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << "\n";
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
-
-    // Clear the background
-    glClearColor(0.4f, 0.0f, 0.4f, 1.0f);
-
     // Initializing music
-    /*static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
+    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
     static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
-    music->setVolume(framework::MUSICVOLUME);*/
+    music->setVolume(framework::MUSICVOLUME);
 
 
     // Reading and creating the map
@@ -84,6 +76,7 @@ int main()
     static framework::Renderer renderer;
     renderer.EnableBlending();
     renderer.EnableDepthTesting();
+    renderer.SetClearColor(glm::vec4(0.3f, 0.0f, 0.3f, 1.0f));
 
     // Variables used to find delta time
     static GLfloat dt, curTime, lastTime;
