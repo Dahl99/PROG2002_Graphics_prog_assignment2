@@ -48,7 +48,6 @@ namespace framework {
 
 		// Declaration of some variables
 		glm::vec3 playerPos;
-		std::vector<glm::vec3> ghostPos;
 
 		int yPos = 0;
 		int playerLoc = 0;
@@ -137,7 +136,7 @@ namespace framework {
 				temp.pos.y = (yPos)+COLLECTIBLESIZE;
 				temp.pos.z = 0;
 
-				playerPos = glm::vec3((float)(i % sizeX), (float)(yPos), 1.0f);
+				playerPos = glm::vec3((float)(i % sizeX), 0.f, (float)yPos);
 
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(WALLMODELPATH);
@@ -178,9 +177,6 @@ namespace framework {
 		entityData.vertices.push_back(map[0].topRight);*/
 
 		characterPositions.push_back(playerPos); // Player pos gets added first
-
-		for (const auto& element : ghostPos)	   // Ghost pos gets added last
-			characterPositions.push_back(element);
 	}
 
 	// Function to print map, used to see if its read correctly
@@ -222,6 +218,14 @@ namespace framework {
 				numCollecs++;
 			}
 		}
+
+		for (int i = 0; i < NUMGHOSTS; i++)
+		{
+			const auto temp = mapVertices.collectibleVertices[((numCollecs / 4) * 4) + (i * 4)].pos;
+			characterPositions.push_back(glm::vec3(temp.x, 0.0f, temp.y));
+		}
+
+
 		return mapVertices;
 	}
 

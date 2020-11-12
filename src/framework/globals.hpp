@@ -33,6 +33,8 @@ namespace framework {
 	const float COLLECTIBLESIZE = 0.35f;
 	const int COLLECTIBLESCORE = 10;
 
+	const int NUMGHOSTS = 4;
+
 
 
 //-------------------------------------------------------------------------------------

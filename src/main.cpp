@@ -89,7 +89,7 @@ int main()
 
     framework::VertexBufferLayout vbl;            // Create a vertex buffer layout
     vbl.Push<GLfloat>(3);                         // Adding position floats to layout
-    vbl.Push<GLfloat>(3);                         // Adding color floats to layout
+    vbl.Push<GLfloat>(3);                         // Adding normal floats to layout
     vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
 
     tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
@@ -126,19 +126,16 @@ int main()
     framework::Texture pinkGhostTex(framework::GHOSTPINKPICTUREPATH);
     pinkGhostTex.Bind(5);
 
-    const auto characterPositions = map1.GetPGPos();
+    const auto characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
     framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATH);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
-    if (characterPositions.size() > 1)
+    for (auto it = characterPositions.begin() + 1; it != characterPositions.end(); it++)
     {
-        for (auto it = characterPositions.begin() + 1; it != characterPositions.end(); it++)
-        {
-            auto ghost = std::make_shared<framework::Entity>(*it, framework::GHOSTMODELPATH);
-            ghosts.push_back(ghost);
-        }
+        auto ghost = std::make_shared<framework::Entity>(*it, framework::GHOSTMODELPATH);
+        ghosts.push_back(ghost);
     }
 
     while (!glfwWindowShouldClose(window))
@@ -157,19 +154,23 @@ int main()
 
         // Move forward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            pacman.UpdatePos(dt, framework::Direction::FORWARD);
+            pacman.Move(dt, framework::Direction::FORWARD);
+            pacman.SetRotation(90.f);
         }
         // Move backward
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            pacman.UpdatePos(dt, framework::Direction::BACK);
+            pacman.Move(dt, framework::Direction::BACK);
+            pacman.SetRotation(270.f);
         }
         // Strafe right
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            pacman.UpdatePos(dt, framework::Direction::RIGHT);
+            pacman.Move(dt, framework::Direction::RIGHT);
+            pacman.SetRotation(0.f);
         }
         // Strafe left
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            pacman.UpdatePos(dt, framework::Direction::LEFT);
+            pacman.Move(dt, framework::Direction::LEFT);
+            pacman.SetRotation(180.f);
         }
 
 
@@ -183,24 +184,21 @@ int main()
         pacTex.Bind(1);
         pacman.Draw(shader, view, proj);
 
-        if (characterPositions.size() > 1)
-        {
-            redGhostTex.Bind(2);
-            shader.SetUniform1i("numTex", 2);
-            ghosts[0]->Draw(shader, view, proj);
+        redGhostTex.Bind(2);
+        shader.SetUniform1i("numTex", 2);
+        ghosts[0]->Draw(shader, view, proj);
 
-            blueGhostTex.Bind(3);
-            shader.SetUniform1i("numTex", 3);
-            ghosts[1]->Draw(shader, view, proj);
+        blueGhostTex.Bind(3);
+        shader.SetUniform1i("numTex", 3);
+        ghosts[1]->Draw(shader, view, proj);
 
-            orangeGhostTex.Bind(4);
-            shader.SetUniform1i("numTex", 4);
-            ghosts[2]->Draw(shader, view, proj);
+        orangeGhostTex.Bind(4);
+        shader.SetUniform1i("numTex", 4);
+        ghosts[2]->Draw(shader, view, proj);
 
-            pinkGhostTex.Bind(5);
-            shader.SetUniform1i("numTex", 5);
-            ghosts[3]->Draw(shader, view, proj);
-        }
+        pinkGhostTex.Bind(5);
+        shader.SetUniform1i("numTex", 5);
+        ghosts[3]->Draw(shader, view, proj);
 
 
         glfwSwapBuffers(window);
