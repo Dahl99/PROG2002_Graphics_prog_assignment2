@@ -72,7 +72,7 @@ namespace framework {
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(WALLMODELPATH);
 
-				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
 
@@ -104,7 +104,7 @@ namespace framework {
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(WALLMODELPATH);
 
-				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{	
 					map[i - 1].model->m_Vertices[j].pos += 0.5f + temp.pos;
 					float tempo = map[i - 1].model->m_Vertices[j].pos.x;
@@ -142,7 +142,7 @@ namespace framework {
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(WALLMODELPATH);
 
-				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
+				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
 				}
@@ -243,21 +243,13 @@ namespace framework {
 		//		indices.push_back(wallmodel.GetIndices()[j] + (i * 8));
 		//	}
 		//}
-
-		// Adds the indices to create the two triangles of each square\
-			the order is 1, 2, 3 and 3, 4, 1 because vertexes are added in botleft, botright, topleft, topright
+		int stride = wallmodel.m_Vertices.size();
 		for (uint32_t i = 0; i < numWalls; i++)
 		{
 			for (int j = 0; j < wallmodel.GetIndices().size(); j++)
 			{
-				indices.push_back(wallmodel.GetIndices()[j] + (i * 8));
+				indices.push_back(wallmodel.GetIndices()[j] + (i * stride));
 			}
-			/*indices.push_back(i * 4);
-			indices.push_back((i * 4) + 1);
-			indices.push_back((i * 4) + 2);
-			indices.push_back((i * 4) + 2);
-			indices.push_back((i * 4) + 3);
-			indices.push_back((i * 4) + 1);*/
 		}		
 		
 		return indices;
