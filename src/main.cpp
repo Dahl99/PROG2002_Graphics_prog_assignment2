@@ -153,22 +153,22 @@ int main()
         //renderer.Draw(collVao, collIbo, tileShader);
 
         // Move forward
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             pacman.Move(dt, framework::Direction::FORWARD);
             pacman.SetRotation(90.f);
         }
         // Move backward
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
             pacman.Move(dt, framework::Direction::BACK);
             pacman.SetRotation(270.f);
         }
         // Strafe right
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             pacman.Move(dt, framework::Direction::RIGHT);
             pacman.SetRotation(0.f);
         }
         // Strafe left
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             pacman.Move(dt, framework::Direction::LEFT);
             pacman.SetRotation(180.f);
         }
