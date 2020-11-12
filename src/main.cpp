@@ -105,6 +105,10 @@ int main()
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
     framework::IndexBuffer collIbo(collIndices);*/
+
+    /** Creating model matrix for walls and collectibles
+     *  As well as view and projection matrices for everything
+     */
     auto wallModel = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
     auto view = glm::lookAt(glm::vec3(14.f, 60.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
@@ -117,14 +121,13 @@ int main()
     pacTex.Bind(1);
 
     // Loading textures for ghosts
-    framework::Texture redGhostTex(framework::GHOSTREDPICTUREPATH);
-    redGhostTex.Bind(2);
-    framework::Texture blueGhostTex(framework::GHOSTBLUEPICTUREPATH);
-    blueGhostTex.Bind(3);
-    framework::Texture orangeGhostTex(framework::GHOSTORANGEPICTUREPATH);
-    orangeGhostTex.Bind(4);
-    framework::Texture pinkGhostTex(framework::GHOSTPINKPICTUREPATH);
-    pinkGhostTex.Bind(5);
+    std::vector<std::shared_ptr<framework::Texture>> ghostTextures;
+    for (int i = 0; i < framework::NUMGHOSTS; i++)
+    {
+        auto temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
+        temp->Bind(i + 2);
+        ghostTextures.push_back(temp);
+    }
 
     const auto characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
@@ -184,21 +187,12 @@ int main()
         pacTex.Bind(1);
         pacman.Draw(shader, view, proj);
 
-        redGhostTex.Bind(2);
-        shader.SetUniform1i("numTex", 2);
-        ghosts[0]->Draw(shader, view, proj);
-
-        blueGhostTex.Bind(3);
-        shader.SetUniform1i("numTex", 3);
-        ghosts[1]->Draw(shader, view, proj);
-
-        orangeGhostTex.Bind(4);
-        shader.SetUniform1i("numTex", 4);
-        ghosts[2]->Draw(shader, view, proj);
-
-        pinkGhostTex.Bind(5);
-        shader.SetUniform1i("numTex", 5);
-        ghosts[3]->Draw(shader, view, proj);
+        for (int i = 0; i < framework::NUMGHOSTS; i++)
+        {
+            ghostTextures[i]->Bind(i+2);
+            shader.SetUniform1i("numTex", i + 2);
+            ghosts[i]->Draw(shader, view, proj);
+        }
 
 
         glfwSwapBuffers(window);
