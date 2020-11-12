@@ -63,11 +63,6 @@ int main()
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(MessageCallback, 0);
 
-    // Initializing music
-    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
-    static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
-    music->setVolume(framework::MUSICVOLUME);
-
 
     // Reading and creating the map
     framework::Map map1(framework::LEVELPATH0);
@@ -77,6 +72,11 @@ int main()
     renderer.EnableBlending();
     renderer.EnableDepthTesting();
     renderer.SetClearColor(glm::vec4(0.3f, 0.0f, 0.3f, 1.0f));
+
+    // Initializing music
+    static irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
+    static irrklang::ISound* music = soundEngine->play2D(framework::SOUNDTRACKPATH.c_str(), GL_TRUE, GL_FALSE, GL_TRUE);
+    music->setVolume(framework::MUSICVOLUME);
 
     // Variables used to find delta time
     static GLfloat dt, curTime, lastTime;
@@ -110,17 +110,24 @@ int main()
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
 
-    framework::Texture pacTex(framework::PACMANPICTUREPATH);    // Loading texture for pacman
+    framework::Texture pacTex(framework::PACMANPICTUREPATH);        // Loading texture for pacman
     pacTex.Bind(0);
 
-    framework::Texture ghostTex(framework::GHOSTPICTUREPATH);   // Loading texture for ghost
-    ghostTex.Bind(1);
+    // Loading textures for ghosts
+    framework::Texture redGhostTex(framework::GHOSTREDPICTUREPATH);
+    redGhostTex.Bind(1);
+    framework::Texture blueGhostTex(framework::GHOSTBLUEPICTUREPATH);
+    blueGhostTex.Bind(2);
+    framework::Texture orangeGhostTex(framework::GHOSTORANGEPICTUREPATH);
+    orangeGhostTex.Bind(3);
+    framework::Texture pinkGhostTex(framework::GHOSTPINKPICTUREPATH);
+    pinkGhostTex.Bind(4);
 
     framework::Entity pacman(glm::vec3(0.0f, 1.0f, 2.0f), framework::PACMANMODELPATH);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 4; i++)
     {
         auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, -1.0f), framework::GHOSTMODELPATH);
         ghosts.push_back(ghost);
@@ -165,10 +172,23 @@ int main()
         pacTex.Bind(0);
         pacman.Draw(shader, view, proj);
 
-        ghostTex.Bind(1);
+
+        redGhostTex.Bind(1);
         shader.SetUniform1i("numTex", 1);
-        for (const auto& ghost : ghosts)
-            ghost->Draw(shader, view, proj);
+        ghosts[0]->Draw(shader, view, proj);
+
+        blueGhostTex.Bind(2);
+        shader.SetUniform1i("numTex", 2);
+        ghosts[1]->Draw(shader, view, proj);
+
+        orangeGhostTex.Bind(3);
+        shader.SetUniform1i("numTex", 3);
+        ghosts[2]->Draw(shader, view, proj);
+
+        pinkGhostTex.Bind(4);
+        shader.SetUniform1i("numTex", 4);
+        ghosts[3]->Draw(shader, view, proj);
+
 
         glfwSwapBuffers(window);
 
