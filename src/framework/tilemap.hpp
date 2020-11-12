@@ -21,7 +21,7 @@ namespace framework{
 		int numWalls, numCollecs;		// Number of each kind of object to draw
 		std::vector<int> array;			// Where the actual map is stored
 		framework::Object* map;			// Where tile data of the map is stored
-		EntityPosData entityData;		// Position of pacman and ghosts
+		std::vector<glm::vec3> characterPositions;
 
 	public:
 		Map(const std::string& levelPath);
@@ -40,7 +40,7 @@ namespace framework{
 		inline int GetNumCollecs() const{ return numCollecs; }
 		inline int GetSizeX() const{ return sizeX; }
 		inline int GetSizeY() const{ return sizeY; }
-		inline framework::EntityPosData GetPGPos() const { return entityData; }
+		inline std::vector<glm::vec3> GetPGPos() const { return characterPositions; }
 
 	};
 

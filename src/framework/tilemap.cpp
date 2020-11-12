@@ -107,9 +107,9 @@ namespace framework {
 				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
 				{	
 					map[i - 1].model->m_Vertices[j].pos += 0.5f + temp.pos;
-					float tempo = map[i - 1].model->m_Vertices[j].pos.x;
+					/*float tempo = map[i - 1].model->m_Vertices[j].pos.x;
 					map[i - 1].model->m_Vertices[j].pos.x = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;*/
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
@@ -177,10 +177,10 @@ namespace framework {
 		entityData.vertices.push_back(map[0].topLeft);
 		entityData.vertices.push_back(map[0].topRight);*/
 
-		entityData.positions.push_back(playerPos); // Player pos gets added first
+		characterPositions.push_back(playerPos); // Player pos gets added first
 
 		for (const auto& element : ghostPos)	   // Ghost pos gets added last
-			entityData.positions.push_back(element);
+			characterPositions.push_back(element);
 	}
 
 	// Function to print map, used to see if its read correctly

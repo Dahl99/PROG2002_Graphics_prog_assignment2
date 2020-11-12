@@ -61,21 +61,16 @@ namespace framework
 		switch (direction)
 		{
 		case Direction::FORWARD:
-
-			position.y += dt * mvSpeed;
-
-			break;
-		case Direction::RIGHT:
 			position.z -= dt * mvSpeed;
 			break;
+		case Direction::RIGHT:
+			position.x += dt * mvSpeed;
+			break;
 		case Direction::BACK:
-
-			position.y -= dt * mvSpeed;
-
-
+			position.z += dt * mvSpeed;
 			break;
 		case Direction::LEFT:
-			position.z += dt * mvSpeed;
+			position.x -= dt * mvSpeed;
 			break;
 		default:
 			break;
