@@ -23,13 +23,13 @@ namespace framework {
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
 
-	const std::string CHARVERTGSHADERPATH = "../res/shaders/character.vert";
-	const std::string CHARFRAGSHADERPATH = "../res/shaders/character.frag";
+	const std::string VERTGSHADERPATH = "../res/shaders/shader.vert";
+	const std::string FRAGSHADERPATH = "../res/shaders/shader.frag";
 
 	const std::string SOUNDTRACKPATH = "../res/music/pacman.wav";
-	const float MUSICVOLUME = 0.25f;
+	const float MUSICVOLUME = 0.2f;
 
-	const int WINDOWSIZEX = 28*28, WINDOWSIZEY = 36*28;
+	const int WINDOWSIZEX = 1280, WINDOWSIZEY = 720;
 	const float COLLECTIBLESIZE = 0.35f;
 	const int COLLECTIBLESCORE = 10;
 
@@ -59,10 +59,5 @@ namespace framework {
 	struct ShaderVertData {
 		std::vector<framework::Vertex> wallVertices;
 		std::vector<framework::Vertex> collectibleVertices;
-	};
-
-	struct EntityPosData {
-		std::vector<Vertex> vertices;
-		std::vector<glm::vec3> positions;
 	};
 }

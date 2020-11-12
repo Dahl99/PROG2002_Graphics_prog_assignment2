@@ -95,6 +95,9 @@ int main()
     tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
     framework::IndexBuffer tileIbo(map1.retMapIndices(0));
 
+    framework::Texture wallTex(framework::WALLPICTUREPATH);
+    wallTex.Bind(0);
+
 
     //                      Preparing collectibles
 
@@ -102,35 +105,40 @@ int main()
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
     framework::IndexBuffer collIbo(collIndices);*/
-
-    auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+    auto wallModel = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
+    auto view = glm::lookAt(glm::vec3(14.f, 60.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
-    framework::Shader shader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
+    framework::Shader shader(framework::VERTGSHADERPATH, framework::FRAGSHADERPATH);
 
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
 
     framework::Texture pacTex(framework::PACMANPICTUREPATH);        // Loading texture for pacman
-    pacTex.Bind(0);
+    pacTex.Bind(1);
 
     // Loading textures for ghosts
     framework::Texture redGhostTex(framework::GHOSTREDPICTUREPATH);
-    redGhostTex.Bind(1);
+    redGhostTex.Bind(2);
     framework::Texture blueGhostTex(framework::GHOSTBLUEPICTUREPATH);
-    blueGhostTex.Bind(2);
+    blueGhostTex.Bind(3);
     framework::Texture orangeGhostTex(framework::GHOSTORANGEPICTUREPATH);
-    orangeGhostTex.Bind(3);
+    orangeGhostTex.Bind(4);
     framework::Texture pinkGhostTex(framework::GHOSTPINKPICTUREPATH);
-    pinkGhostTex.Bind(4);
+    pinkGhostTex.Bind(5);
 
-    framework::Entity pacman(glm::vec3(0.0f, 1.0f, 2.0f), framework::PACMANMODELPATH);  // Creating pacman entity with model
+    const auto characterPositions = map1.GetPGPos();
+
+    framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATH);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
-    for (int i = 0; i < 4; i++)
+    if (characterPositions.size() > 1)
     {
-        auto ghost = std::make_shared<framework::Entity>(glm::vec3(0.0f, 1.0f, -1.0f), framework::GHOSTMODELPATH);
-        ghosts.push_back(ghost);
+        for (auto it = characterPositions.begin() + 1; it != characterPositions.end(); it++)
+        {
+            auto ghost = std::make_shared<framework::Entity>(*it, framework::GHOSTMODELPATH);
+            ghosts.push_back(ghost);
+        }
     }
 
     while (!glfwWindowShouldClose(window))
@@ -165,29 +173,34 @@ int main()
         }
 
 
+        shader.SetUniformMat4f("u_Model", wallModel);
+        shader.SetUniform1i("numTex", 0);
+        wallTex.Bind(0);
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
 
-        shader.SetUniform1i("numTex", 0);
-        pacTex.Bind(0);
+        shader.SetUniform1i("numTex", 1);
+        pacTex.Bind(1);
         pacman.Draw(shader, view, proj);
 
+        if (characterPositions.size() > 1)
+        {
+            redGhostTex.Bind(2);
+            shader.SetUniform1i("numTex", 2);
+            ghosts[0]->Draw(shader, view, proj);
 
-        redGhostTex.Bind(1);
-        shader.SetUniform1i("numTex", 1);
-        ghosts[0]->Draw(shader, view, proj);
+            blueGhostTex.Bind(3);
+            shader.SetUniform1i("numTex", 3);
+            ghosts[1]->Draw(shader, view, proj);
 
-        blueGhostTex.Bind(2);
-        shader.SetUniform1i("numTex", 2);
-        ghosts[1]->Draw(shader, view, proj);
+            orangeGhostTex.Bind(4);
+            shader.SetUniform1i("numTex", 4);
+            ghosts[2]->Draw(shader, view, proj);
 
-        orangeGhostTex.Bind(3);
-        shader.SetUniform1i("numTex", 3);
-        ghosts[2]->Draw(shader, view, proj);
-
-        pinkGhostTex.Bind(4);
-        shader.SetUniform1i("numTex", 4);
-        ghosts[3]->Draw(shader, view, proj);
+            pinkGhostTex.Bind(5);
+            shader.SetUniform1i("numTex", 5);
+            ghosts[3]->Draw(shader, view, proj);
+        }
 
 
         glfwSwapBuffers(window);
