@@ -83,6 +83,7 @@ int main()
     dt = curTime = lastTime = 0.0f;
 
     framework::ShaderVertData vertices = map1.retMapVertices();
+    framework::IndiceData indices = map1.retMapIndices();
 
     framework::VertexArray tileVao;               // Create a vertex array
     framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
@@ -93,21 +94,28 @@ int main()
     vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
 
     tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
-    framework::IndexBuffer tileIbo(map1.retMapIndices(0));
+    framework::IndexBuffer tileIbo(indices.walls);
 
     framework::Texture wallTex(framework::WALLPICTUREPATH);
     wallTex.Bind(0);
 
+    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
+    collTex.Bind(6);
+
 
     //                      Preparing collectibles
 
-    /*framework::VertexArray collVao;
+    framework::VertexArray collVao;
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
-    framework::IndexBuffer collIbo(collIndices);*/
+    framework::IndexBuffer collIbo(indices.collectibles);
+
+
     auto wallModel = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
     auto view = glm::lookAt(glm::vec3(14.f, 60.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
+
+
     framework::Shader shader(framework::VERTGSHADERPATH, framework::FRAGSHADERPATH);
 
     shader.SetUniformMat4f("u_View", view);
@@ -178,6 +186,10 @@ int main()
         wallTex.Bind(0);
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
+        shader.SetUniformMat4f("u_Model", wallModel);
+        shader.SetUniform1i("numTex", 6);
+        collTex.Bind(6);
+        renderer.Draw(collVao, collIbo, shader);
 
         shader.SetUniform1i("numTex", 1);
         pacTex.Bind(1);

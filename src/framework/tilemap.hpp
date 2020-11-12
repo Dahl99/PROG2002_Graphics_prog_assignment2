@@ -14,7 +14,6 @@ namespace framework{
 		Model* model;
 	};
 
-
 	class Map {
 	private:
 		int sizeX, sizeY, sizeArray;	// Map dimensions information variables
@@ -31,7 +30,7 @@ namespace framework{
 		void PrintMap() const;
 
 		ShaderVertData retMapVertices();
-		std::vector<GLuint> retMapIndices(int iterations);
+		IndiceData retMapIndices();
 
 		// Functions that return the private data of this class
 		inline std::vector<int> GetArray() const { return array; }

@@ -67,15 +67,17 @@ namespace framework {
 				// Bottom left vertex
 				temp.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
 				temp.pos.y = (yPos)+COLLECTIBLESIZE;
-				temp.pos.z = 0;
+				temp.pos.z = 0.0;
 				
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = new Model(WALLMODELPATH);
+				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
-
+					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
@@ -107,9 +109,9 @@ namespace framework {
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{	
 					map[i - 1].model->m_Vertices[j].pos += 0.5f + temp.pos;
-					/*float tempo = map[i - 1].model->m_Vertices[j].pos.x;
-					map[i - 1].model->m_Vertices[j].pos.x = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;*/
+					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
@@ -140,11 +142,14 @@ namespace framework {
 				playerPos = glm::vec3((float)(i % sizeX), (float)(yPos), 1.0f);
 
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = new Model(WALLMODELPATH);
+				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
+					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 
 				//// Bottom right vertex
@@ -227,28 +232,29 @@ namespace framework {
 
 
 	// Creates the indice arrays for the map
-	std::vector<GLuint> Map::retMapIndices(int iterations)
+	IndiceData Map::retMapIndices()
 	{
 		// Create the return value container
-		std::vector<GLuint> indices;
+		IndiceData indices;
+		Model collmodel = Model(COLLECTIBLEMODELPATH);
+		
+		int stride = collmodel.m_Vertices.size();
+		for (uint32_t i = 0; i < numCollecs; i++)
+		{
+			for (int j = 0; j < collmodel.GetIndices().size(); j++)
+			{
+				indices.collectibles.push_back(collmodel.GetIndices()[j] + (i * stride));
+			}
+		}
+
 		Model wallmodel = Model(WALLMODELPATH);
-		
-		
-		// Add collectible model later
-		//Model wallmodel = Model(WALLMODELPATH);
-		//for (uint32_t i = 0; i < numCollecs; i++)
-		//{
-		//	for (int j = 0; j < wallmodel.GetIndices().size(); j++)
-		//	{
-		//		indices.push_back(wallmodel.GetIndices()[j] + (i * 8));
-		//	}
-		//}
-		int stride = wallmodel.m_Vertices.size();
+
+		stride = wallmodel.m_Vertices.size();
 		for (uint32_t i = 0; i < numWalls; i++)
 		{
 			for (int j = 0; j < wallmodel.GetIndices().size(); j++)
 			{
-				indices.push_back(wallmodel.GetIndices()[j] + (i * stride));
+				indices.walls.push_back(wallmodel.GetIndices()[j] + (i * stride));
 			}
 		}		
 		
