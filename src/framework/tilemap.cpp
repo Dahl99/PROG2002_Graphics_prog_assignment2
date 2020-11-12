@@ -74,7 +74,8 @@ namespace framework {
 
 				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
 				{
-					map[i - 1].model->GetVertices()[j].pos += temp.pos + 0.5f;
+					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
+
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
@@ -105,11 +106,10 @@ namespace framework {
 
 				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
 				{	
-					map[i - 1].model->GetVertices()[j].pos += 0.5f;
-					map[i - 1].model->GetVertices()[j].pos.x += temp.pos.x;
-					map[i - 1].model->GetVertices()[j].pos.y += temp.pos.y;
-					map[i - 1].model->GetVertices()[j].pos.z += temp.pos.z;
-
+					map[i - 1].model->m_Vertices[j].pos += 0.5f + temp.pos;
+					float tempo = map[i - 1].model->m_Vertices[j].pos.x;
+					map[i - 1].model->m_Vertices[j].pos.x = map[i - 1].model->m_Vertices[j].pos.z;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
@@ -144,7 +144,7 @@ namespace framework {
 
 				for (int j = 0; j < map[i - 1].model->GetVertices().size(); j++)
 				{
-					map[i - 1].model->GetVertices()[j].pos += temp.pos + 0.5f;
+					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
 				}
 
 				//// Bottom right vertex

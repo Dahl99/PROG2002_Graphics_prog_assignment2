@@ -103,7 +103,12 @@ int main()
     collVao.AddBuffer(collVbo, vbl);
     framework::IndexBuffer collIbo(collIndices);*/
 
-    framework::Shader charShader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
+    auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+    auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
+    framework::Shader shader(framework::CHARVERTGSHADERPATH, framework::CHARFRAGSHADERPATH);
+
+    shader.SetUniformMat4f("u_View", view);
+    shader.SetUniformMat4f("u_Projection", proj);
 
     framework::Texture pacTex(framework::PACMANPICTUREPATH);    // Loading texture for pacman
     pacTex.Bind(0);
@@ -132,7 +137,6 @@ int main()
 
         //                              Draw calls
 
-        renderer.Draw(tileVao, tileIbo, charShader);    // Drawing map
         //collVbo.UpdateData(vertices.collectibleVertices);
         //renderer.Draw(collVao, collIbo, tileShader);
 
@@ -153,17 +157,18 @@ int main()
             pacman.UpdatePos(dt, framework::Direction::LEFT);
         }
 
-        auto view = glm::lookAt(glm::vec3(12.f, 1.f, 0.f), { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
-        auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
-        charShader.SetUniform1i("numTex", 0);
+        renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
+
+
+        shader.SetUniform1i("numTex", 0);
         pacTex.Bind(0);
-        pacman.Draw(charShader, view, proj);
+        pacman.Draw(shader, view, proj);
 
         ghostTex.Bind(1);
-        charShader.SetUniform1i("numTex", 1);
+        shader.SetUniform1i("numTex", 1);
         for (const auto& ghost : ghosts)
-            ghost->Draw(charShader, view, proj);
+            ghost->Draw(shader, view, proj);
 
         glfwSwapBuffers(window);
 
