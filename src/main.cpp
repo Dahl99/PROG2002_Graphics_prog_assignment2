@@ -192,7 +192,7 @@ int main()
         wallTex.Bind(0);
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
-            shader.SetUniform1i("numTex", 1);
+        shader.SetUniform1i("numTex", 1);
         if (pacmanAnimTimer < 1.5f)
         {
             pacmanTextures.front()->Bind(1);
@@ -206,9 +206,10 @@ int main()
             pacmanEntities.back()->SetRotation(pacmanEntities.front()->GetRotation());
             pacmanEntities.back()->Draw(shader, view, proj);
             pacmanAnimTimer += 0.05f;
+
+            if (pacmanAnimTimer >= 3.0f)
+                pacmanAnimTimer = 0.0f;
         }
-        else
-            pacmanAnimTimer = 0.0f;
 
 
         for (int i = 0; i < framework::NUMGHOSTS; i++)
