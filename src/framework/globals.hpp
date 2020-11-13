@@ -8,8 +8,11 @@ namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
 
-	const std::string PACMANMODELPATH = "../res/models/pacman/pacman.obj";
-	const std::string PACMANPICTUREPATH = "../res/models/pacman/pacman_texture.png";
+	const std::string PACMANMODELPATHS[] = { "../res/models/pacman/pacman.obj",
+											 "../res/models/pacman/pacman_closed.obj" };
+
+	const std::string PACMANPICTUREPATHS[] = { "../res/models/pacman/pacman_texture.png",
+											   "../res/models/pacman/pacman_closed_texture.png" };
 	
 	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
 
@@ -28,7 +31,7 @@ namespace framework {
 	const std::string FRAGSHADERPATH = "../res/shaders/shader.frag";
 
 	const std::string SOUNDTRACKPATH = "../res/music/pacman.wav";
-	const float MUSICVOLUME = 0.2f;
+	const float MUSICVOLUME = 0.0f;
 
 	const int WINDOWSIZEX = 1280, WINDOWSIZEY = 720;
 	const float COLLECTIBLESIZE = 0.35f;

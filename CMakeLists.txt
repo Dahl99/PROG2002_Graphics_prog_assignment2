@@ -70,13 +70,7 @@ add_executable(Assignment2
 	src/framework/model.cpp
 	
 	src/framework/globals.hpp
-	
-	res/levels/level0 
-	res/shaders/tile.vert
-	res/shaders/tile.frag
-	res/shaders/character.vert
-	res/shaders/character.frag
-	
+
 	external/imgui/imconfig.h
     external/imgui/imgui.cpp
     external/imgui/imgui_draw.cpp

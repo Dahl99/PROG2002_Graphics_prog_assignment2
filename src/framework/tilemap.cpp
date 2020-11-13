@@ -221,8 +221,8 @@ namespace framework {
 
 		for (int i = 0; i < NUMGHOSTS; i++)
 		{
-			const auto temp = mapVertices.collectibleVertices[((numCollecs / 4) * 4) + (i * 4)].pos;
-			characterPositions.push_back(glm::vec3(temp.x, 0.0f, temp.y));
+			const auto temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 4)].pos;
+			characterPositions.push_back(temp);
 		}
 
 
