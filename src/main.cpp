@@ -99,9 +99,6 @@ int main()
     framework::Texture wallTex(framework::WALLPICTUREPATH);
     wallTex.Bind(0);
 
-    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
-    collTex.Bind(6);
-
 
     //                      Preparing collectibles
 
@@ -112,7 +109,7 @@ int main()
 
 
     auto wallModel = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-    auto view = glm::lookAt(glm::vec3(14.f, 60.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 
@@ -133,6 +130,10 @@ int main()
     orangeGhostTex.Bind(4);
     framework::Texture pinkGhostTex(framework::GHOSTPINKPICTUREPATH);
     pinkGhostTex.Bind(5);
+
+    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
+    collTex.Bind(6);
+
 
     const auto characterPositions = map1.GetPGPos();
 
@@ -186,10 +187,6 @@ int main()
         wallTex.Bind(0);
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
-        shader.SetUniformMat4f("u_Model", wallModel);
-        shader.SetUniform1i("numTex", 6);
-        collTex.Bind(6);
-        renderer.Draw(collVao, collIbo, shader);
 
         shader.SetUniform1i("numTex", 1);
         pacTex.Bind(1);
@@ -214,6 +211,11 @@ int main()
             ghosts[3]->Draw(shader, view, proj);
         }
 
+        shader.SetUniformMat4f("u_Model", wallModel);
+        shader.SetUniform1i("numTex", 6);
+        //shader.SetUniformMat4f("u_Model", wallModel);;
+        collTex.Bind(6);
+        renderer.Draw(collVao, collIbo, shader);
 
         glfwSwapBuffers(window);
 
