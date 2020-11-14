@@ -17,7 +17,7 @@ namespace framework
 		Texture(const std::string& filepath, GLboolean flip = true);
 		~Texture();
 
-		void Bind(GLuint slot) const;				// Binds texture to specified texture slot
+		void Bind(GLuint slot = 0) const;				// Binds texture to specified texture slot
 		void Unbind() const;						// Unbinds the texture
 
 		inline int GetWidth() const { return w; }	// Getter for width

@@ -12,12 +12,12 @@ namespace framework {
 	const std::string PACMANMODELPATHS[] = { "../res/models/pacman/pacman.obj",
 											 "../res/models/pacman/pacman_closed.obj" };
 
-	const std::string PACMANPICTUREPATHS[] = { "../res/models/pacman/pacman_texture.png",
+	const std::string PACMANTEXTUREPATHS[] = { "../res/models/pacman/pacman_texture.png",
 											   "../res/models/pacman/pacman_closed_texture.png" };
 	
 	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
 
-	const std::string GHOSTTEXTURES[] = { "../res/models/ghosts/ghost_red.png", 
+	const std::string GHOSTTEXTUREPATHS[] = { "../res/models/ghosts/ghost_red.png", 
 										  "../res/models/ghosts/ghost_blue.png", 
 										  "../res/models/ghosts/ghost_orange.png",
 										  "../res/models/ghosts/ghost_pink.png" };
