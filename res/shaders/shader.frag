@@ -13,6 +13,7 @@ layout(binding = 2) uniform sampler2D u_Texture2;
 layout(binding = 3) uniform sampler2D u_Texture3;
 layout(binding = 4) uniform sampler2D u_Texture4;
 layout(binding = 5) uniform sampler2D u_Texture5;
+layout(binding = 6) uniform sampler2D u_Texture6;
 uniform int numTex;
 
 void main()
@@ -42,6 +43,10 @@ void main()
 	else if(numTex == 5)
 	{
 		texColor = texture(u_Texture5, v_TexCoords);
+	}	
+	else if(numTex == 6)
+	{
+		texColor = texture(u_Texture6, v_TexCoords);
 	}
 
 	FragColor = texColor;

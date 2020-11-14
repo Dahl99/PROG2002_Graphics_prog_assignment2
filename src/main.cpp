@@ -82,7 +82,8 @@ int main()
     static GLfloat dt, curTime, lastTime, pacmanAnimTimer;
     dt = curTime = lastTime = pacmanAnimTimer = 0.0f;
 
-    framework::ShaderVertData vertices = map1.retMapVertices();
+    framework::ShaderVertData vertices = map1.RetMapVertices();
+    framework::IndiceData indices = map1.RetMapIndices();
 
     framework::VertexArray tileVao;               // Create a vertex array
     framework::VertexBuffer tileVbo(vertices.wallVertices);    // Create a vertex buffer
@@ -93,7 +94,7 @@ int main()
     vbl.Push<GLfloat>(2);                         // Adding tex coords floats to layout
 
     tileVao.AddBuffer(tileVbo, vbl);              // Populating the vertex buffer
-    framework::IndexBuffer tileIbo(map1.retMapIndices(0));
+    framework::IndexBuffer tileIbo(indices.walls);
 
     framework::Texture wallTex(framework::WALLPICTUREPATH);
     wallTex.Bind(0);
@@ -101,17 +102,25 @@ int main()
 
     //                      Preparing collectibles
 
-    /*framework::VertexArray collVao;
+    framework::VertexArray collVao;
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
-    framework::IndexBuffer collIbo(collIndices);*/
+
+    framework::IndexBuffer collIbo(indices.collectibles);
 
     /** Creating model matrix for walls and collectibles
      *  As well as view and projection matrices for everything
-     */
+     */   
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-    auto view = glm::lookAt(glm::vec3(14.f, 40.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    
+    //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    //auto view = glm::lookAt(glm::vec3(14.f, 8.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    //auto view = glm::lookAt(glm::vec3(14.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
+
+
     framework::Shader shader(framework::VERTGSHADERPATH, framework::FRAGSHADERPATH);
 
     shader.SetUniformMat4f("u_View", view);
@@ -142,6 +151,13 @@ int main()
         const auto temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
         ghostTextures.push_back(temp);
     }
+
+
+    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
+    collTex.Bind(6);
+
+
+    framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATHS[0]);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
@@ -219,6 +235,11 @@ int main()
             ghosts[i]->Draw(shader, view, proj);
         }
 
+        shader.SetUniformMat4f("u_Model", tileModelMatrix);
+        shader.SetUniform1i("numTex", 6);
+        //shader.SetUniformMat4f("u_Model", wallModel);;
+        collTex.Bind(6);
+        renderer.Draw(collVao, collIbo, shader);
 
         glfwSwapBuffers(window);
 

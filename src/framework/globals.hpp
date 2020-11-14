@@ -1,6 +1,7 @@
 #pragma once
-#include <string>
 #include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <string>
 #include <memory>
 #include <vector>
 
@@ -21,8 +22,12 @@ namespace framework {
 										  "../res/models/ghosts/ghost_orange.png",
 										  "../res/models/ghosts/ghost_pink.png" };
 
-	const std::string WALLPICTUREPATH = "../res/models/cube/SlimeTexture.png";
+	const std::string WALLPICTUREPATH = "../res/models/cube/cubetexture.png";
 	const std::string WALLMODELPATH = "../res/models/cube/slime.obj";
+
+	const std::string COLLECTIBLEPICTUREPATH = "../res/models/cube/SlimeTexture.png";
+	const std::string COLLECTIBLEMODELPATH = "../res/models/cube/collectible.obj";
+
 
 	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
 	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
@@ -65,5 +70,10 @@ namespace framework {
 	struct ShaderVertData {
 		std::vector<framework::Vertex> wallVertices;
 		std::vector<framework::Vertex> collectibleVertices;
+	};
+
+	struct IndiceData {
+		std::vector<GLuint> walls;
+		std::vector<GLuint> collectibles;
 	};
 }
