@@ -13,10 +13,11 @@ namespace framework {
 	const std::string PACMANPICTUREPATH = "../res/models/pacman/pacman_texture.png";
 	
 	const std::string GHOSTMODELPATH = "../res/models/ghosts/ghost.obj";
-	const std::string GHOSTREDPICTUREPATH = "../res/models/ghosts/ghost_red.png";
-	const std::string GHOSTBLUEPICTUREPATH = "../res/models/ghosts/ghost_blue.png";
-	const std::string GHOSTORANGEPICTUREPATH = "../res/models/ghosts/ghost_orange.png";
-	const std::string GHOSTPINKPICTUREPATH = "../res/models/ghosts/ghost_pink.png";
+
+	const std::string GHOSTTEXTURES[] = { "../res/models/ghosts/ghost_red.png", 
+										  "../res/models/ghosts/ghost_blue.png", 
+										  "../res/models/ghosts/ghost_orange.png",
+										  "../res/models/ghosts/ghost_pink.png" };
 
 	const std::string WALLPICTUREPATH = "../res/models/cube/cubetexture.png";
 	const std::string WALLMODELPATH = "../res/models/cube/slime.obj";
@@ -37,6 +38,8 @@ namespace framework {
 	const int WINDOWSIZEX = 1280, WINDOWSIZEY = 720;
 	const float COLLECTIBLESIZE = 0.35f;
 	const int COLLECTIBLESCORE = 10;
+
+	const int NUMGHOSTS = 4;
 
 
 

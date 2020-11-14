@@ -29,8 +29,8 @@ namespace framework{
 		void CreateMap();
 		void PrintMap() const;
 
-		ShaderVertData retMapVertices();
-		IndiceData retMapIndices();
+		ShaderVertData RetMapVertices();
+		IndiceData RetMapIndices();
 
 		// Functions that return the private data of this class
 		inline std::vector<int> GetArray() const { return array; }

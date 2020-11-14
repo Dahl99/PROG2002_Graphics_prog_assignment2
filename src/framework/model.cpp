@@ -29,6 +29,7 @@ namespace framework
         std::vector<tinyobj::material_t> mats{};
         std::string warning{}, error{};
 
+        // Used for caching of vertices when loading model to save memory
         std::unordered_map<Vertex, uint32_t> vertex_cache{};
 
         // Loading model using tinyobjloader
@@ -45,14 +46,14 @@ namespace framework
                                    attrib.vertices[3 * index.vertex_index + 1],
                                    attrib.vertices[3 * index.vertex_index + 2] };
 
-                vertex.nor = { attrib.normals[3 * index.normal_index + 0],
+                vertex.nor = { attrib.normals[static_cast<__int64>(3) * index.normal_index + 0],
                                   attrib.normals[3 * index.normal_index + 1],
                                   attrib.normals[3 * index.normal_index + 2] };
 
-                vertex.tex = { attrib.texcoords[2 * index.texcoord_index + 0],
+                vertex.tex = { attrib.texcoords[static_cast<__int64>(2) * index.texcoord_index + 0],
                                    attrib.texcoords[2 * index.texcoord_index + 1] };
 
-                if (vertex_cache.find(vertex) == vertex_cache.end())
+                if (vertex_cache.find(vertex) == vertex_cache.end()) // Checking if vertex isn't in cache
                 {
                     vertex_cache[vertex] = m_Vertices.size();
                     m_Vertices.push_back(vertex);

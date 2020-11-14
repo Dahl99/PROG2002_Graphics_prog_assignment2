@@ -45,8 +45,8 @@ namespace framework {
 		inline glm::vec3 GetPosition() const { return position; };					// Getter for position vector
 		inline void SetPosition(glm::vec3 position) { this->position = position; }	// Setter for position vector
 
-		void UpdatePos(const GLfloat& dt, const Direction& direction);				// Updates entity position based on delta time and direction
+		void Move(const GLfloat& dt, const Direction& direction);				// Updates entity position based on direction using delta time
 		void ModPos(int loc) { position.x = loc; };
-		void Draw(Shader& shader, glm::mat4& view, glm::mat4& proj) const;			// Draws entity onto screen
+		void Draw(Shader& shader, glm::mat4& view, glm::mat4& proj) const;		// Draws entity onto screen
 	};
 }

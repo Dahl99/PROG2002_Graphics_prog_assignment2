@@ -55,7 +55,7 @@ namespace framework
 		glDrawElements(GL_TRIANGLES, ibo->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	void Entity::UpdatePos(const GLfloat& dt, const Direction& direction)
+	void Entity::Move(const GLfloat& dt, const Direction& direction)
 	{
 		// Updates position based on direction
 		switch (direction)

@@ -48,9 +48,8 @@ namespace framework {
 
 		// Declaration of some variables
 		glm::vec3 playerPos;
-		std::vector<glm::vec3> ghostPos;
 
-		int yPos = 0;
+		int zPos = 0;
 		int playerLoc = 0;
 
 		// For the the map read in the constructor, check each number and assign possition and colour 
@@ -65,9 +64,9 @@ namespace framework {
 					//  to the vertice positions in order to reduce the size of the collectible
 				
 				// Bottom left vertex
-				temp.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				temp.pos.y = (yPos)+COLLECTIBLESIZE;
-				temp.pos.z = 0.0;
+				temp.pos.x = ((i - 1) % sizeX);
+				temp.pos.y = 0.0;
+				temp.pos.z = (zPos);
 				
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
@@ -75,23 +74,26 @@ namespace framework {
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
-					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
-					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;
+					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					//if (map[i - 1].model->m_Vertices[j].pos.z < 0)
+					//	map[i - 1].model->m_Vertices[j].pos.y = 0;
+					//else map[i - 1].model->m_Vertices[j].pos.y = 1;
+					////map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
+					//map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].botRight.pos.y = (yPos)+COLLECTIBLESIZE;
+				//map[i - 1].botRight.pos.y = (zPos)+COLLECTIBLESIZE;
 
 
 				//// Top left vertex
 				//map[i - 1].topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				//map[i - 1].topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
+				//map[i - 1].topLeft.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 
 				//// Top right vertex
 				//map[i - 1].topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
+				//map[i - 1].topRight.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 				break;
 
@@ -100,32 +102,34 @@ namespace framework {
 
 				// Bottom left vertex
 				temp.pos.x = ((i - 1) % sizeX);
-				temp.pos.y = (yPos);
-				temp.pos.z = 0;
+				temp.pos.y = 0;
+				temp.pos.z = (zPos);
 
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(WALLMODELPATH);
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{	
-					map[i - 1].model->m_Vertices[j].pos += 0.5f + temp.pos;
-					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
-					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;
+					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
+					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					//if (map[i - 1].model->m_Vertices[j].pos.z < 0)
+					//	map[i - 1].model->m_Vertices[j].pos.y = 0;
+					//else map[i - 1].model->m_Vertices[j].pos.y = 1;
+					////map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
+					//map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
-				//map[i - 1].botRight.pos.y = yPos;
-				map[i - 1].model->GetVertices()[2].pos.x = 5;
+				//map[i - 1].botRight.pos.y = zPos;
 
 
 				//// Top left vertex
 				//map[i - 1].topLeft.pos.x = (i - 1) % sizeX;
-				//map[i - 1].topLeft.pos.y = yPos + 1;
+				//map[i - 1].topLeft.pos.y = zPos + 1;
 
 				//// Top right vertex
 				//map[i - 1].topRight.pos.x = ((i - 1) % sizeX) + 1;
-				//map[i - 1].topRight.pos.y = yPos + 1;
+				//map[i - 1].topRight.pos.y = zPos + 1;
 
 				break;
 
@@ -136,10 +140,10 @@ namespace framework {
 
 				// Bottom left vertex
 				temp.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				temp.pos.y = (yPos)+COLLECTIBLESIZE;
-				temp.pos.z = 0;
+				temp.pos.y = 0;
+				temp.pos.z = (zPos)+COLLECTIBLESIZE;
 
-				playerPos = glm::vec3((float)(i % sizeX), (float)(yPos), 1.0f);
+				playerPos = glm::vec3((float)(i % sizeX), 0.f, (float)zPos);
 
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
@@ -147,33 +151,33 @@ namespace framework {
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
 					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
-					float tempo = map[i - 1].model->m_Vertices[j].pos.y;
+					/*float tempo = map[i - 1].model->m_Vertices[j].pos.y;
 					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;
+					map[i - 1].model->m_Vertices[j].pos.z = tempo;*/
 				}
 
 				//// Bottom right vertex
 				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].botRight.pos.y = (yPos)+COLLECTIBLESIZE;
+				//map[i - 1].botRight.pos.y = (zPos)+COLLECTIBLESIZE;
 
 
 				//// Top left vertex
 				//map[i - 1].topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				//map[i - 1].topLeft.pos.y = (yPos + 1) - COLLECTIBLESIZE;
+				//map[i - 1].topLeft.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 
 				//// Top right vertex
 				//map[i - 1].topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].topRight.pos.y = (yPos + 1) - COLLECTIBLESIZE;
+				//map[i - 1].topRight.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 				break;
 			default:
 				break;
 			}
 
-			// Updates yPos to ensure correct coordinates
+			// Updates zPos to ensure correct coordinates
 			if (i % sizeX == 0 && i != 0)
-				yPos++;
+				zPos++;
 		}
 
 		// Adding vertices and entity positions to entityData
@@ -183,9 +187,6 @@ namespace framework {
 		entityData.vertices.push_back(map[0].topRight);*/
 
 		characterPositions.push_back(playerPos); // Player pos gets added first
-
-		for (const auto& element : ghostPos)	   // Ghost pos gets added last
-			characterPositions.push_back(element);
 	}
 
 	// Function to print map, used to see if its read correctly
@@ -205,7 +206,7 @@ namespace framework {
 
 	// Loops through mapsize and puts the data for each tile into one of two vector containers,
 	//  one for walls and one for collectibles
-	ShaderVertData Map::retMapVertices()
+	ShaderVertData Map::RetMapVertices()
 	{
 		// Creates the return data container
 		ShaderVertData mapVertices;
@@ -227,12 +228,21 @@ namespace framework {
 				numCollecs++;
 			}
 		}
+
+
+		for (int i = 0; i < NUMGHOSTS; i++)
+		{
+			const auto temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 4)].pos;
+			characterPositions.push_back(glm::vec3(temp.x, 0.0f, temp.y));
+		}
+
+
 		return mapVertices;
 	}
 
 
 	// Creates the indice arrays for the map
-	IndiceData Map::retMapIndices()
+	IndiceData Map::RetMapIndices()
 	{
 		// Create the return value container
 		IndiceData indices;
