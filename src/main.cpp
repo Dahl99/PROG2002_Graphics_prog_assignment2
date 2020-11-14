@@ -79,8 +79,8 @@ int main()
     music->setVolume(framework::MUSICVOLUME);
 
     // Variables used to find delta time
-    static GLfloat dt, curTime, lastTime;
-    dt = curTime = lastTime = 0.0f;
+    static GLfloat dt, curTime, lastTime, pacmanAnimTimer;
+    dt = curTime = lastTime = pacmanAnimTimer = 0.0f;
 
     framework::ShaderVertData vertices = map1.RetMapVertices();
     framework::IndiceData indices = map1.RetMapIndices();
@@ -110,11 +110,14 @@ int main()
 
     /** Creating model matrix for walls and collectibles
      *  As well as view and projection matrices for everything
-     */
-    auto wallModel = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
+     */   
+    auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
     
-    auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    //auto view = glm::lookAt(glm::vec3(14.f, 8.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    //auto view = glm::lookAt(glm::vec3(14.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 
@@ -123,15 +126,29 @@ int main()
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
 
-    framework::Texture pacTex(framework::PACMANPICTUREPATH);        // Loading texture for pacman
-    pacTex.Bind(1);
+    const auto characterPositions = map1.GetPGPos();    // Getting player and ghost positions
+
+    // Loading textures for pacman characters and adding them to a vector
+    std::vector<std::shared_ptr<framework::Texture>> pacmanTextures;
+    for (const auto& texPath : framework::PACMANPICTUREPATHS)
+    {
+        const auto temp = std::make_shared<framework::Texture>(texPath);
+        pacmanTextures.push_back(temp);
+    }
+
+    // Loading both pacman models and adding them to a vector
+    std::vector<std::shared_ptr<framework::Entity>> pacmanEntities;
+    for (const auto& modelPath : framework::PACMANMODELPATHS)
+    {
+        const auto temp = std::make_shared<framework::Entity>(characterPositions.front(), modelPath);
+        pacmanEntities.push_back(temp);
+    }
 
     // Loading textures for ghosts
     std::vector<std::shared_ptr<framework::Texture>> ghostTextures;
     for (int i = 0; i < framework::NUMGHOSTS; i++)
     {
-        auto temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
-        temp->Bind(i + 2);
+        const auto temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
         ghostTextures.push_back(temp);
     }
 
@@ -140,10 +157,7 @@ int main()
     collTex.Bind(6);
 
 
-    const auto characterPositions = map1.GetPGPos();    // Getting player and ghost positions
-
-
-    framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATH);  // Creating pacman entity with model
+    framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATHS[0]);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
@@ -169,35 +183,50 @@ int main()
 
         // Move forward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            pacman.Move(dt, framework::Direction::FORWARD);
-            pacman.SetRotation(90.f);
+            pacmanEntities.front()->Move(dt, framework::Direction::FORWARD);
+            pacmanEntities.front()->SetRotation(90.f);
         }
         // Move backward
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            pacman.Move(dt, framework::Direction::BACK);
-            pacman.SetRotation(270.f);
+            pacmanEntities.front()->Move(dt, framework::Direction::BACK);
+            pacmanEntities.front()->SetRotation(270.f);
         }
         // Strafe right
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            pacman.Move(dt, framework::Direction::RIGHT);
-            pacman.SetRotation(0.f);
+            pacmanEntities.front()->Move(dt, framework::Direction::RIGHT);
+            pacmanEntities.front()->SetRotation(0.f);
         }
         // Strafe left
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            pacman.Move(dt, framework::Direction::LEFT);
-            pacman.SetRotation(180.f);
+            pacmanEntities.front()->Move(dt, framework::Direction::LEFT);
+            pacmanEntities.front()->SetRotation(180.f);
         }
 
 
-        shader.SetUniformMat4f("u_Model", wallModel);
+        shader.SetUniformMat4f("u_Model", tileModelMatrix);
         shader.SetUniform1i("numTex", 0);
         wallTex.Bind(0);
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
-
         shader.SetUniform1i("numTex", 1);
-        pacTex.Bind(1);
-        pacman.Draw(shader, view, proj);
+        if (pacmanAnimTimer < 1.5f)
+        {
+            pacmanTextures.front()->Bind(1);
+            pacmanEntities.front()->Draw(shader, view, proj);
+            pacmanAnimTimer += 0.05f;
+        }
+        else if (pacmanAnimTimer < 3.0f)
+        {
+            pacmanTextures.back()->Bind(1);
+            pacmanEntities.back()->SetPosition(pacmanEntities.front()->GetPosition());
+            pacmanEntities.back()->SetRotation(pacmanEntities.front()->GetRotation());
+            pacmanEntities.back()->Draw(shader, view, proj);
+            pacmanAnimTimer += 0.05f;
+
+            if (pacmanAnimTimer >= 3.0f)
+                pacmanAnimTimer = 0.0f;
+        }
+
 
         for (int i = 0; i < framework::NUMGHOSTS; i++)
         {
@@ -206,7 +235,7 @@ int main()
             ghosts[i]->Draw(shader, view, proj);
         }
 
-        shader.SetUniformMat4f("u_Model", wallModel);
+        shader.SetUniformMat4f("u_Model", tileModelMatrix);
         shader.SetUniform1i("numTex", 6);
         //shader.SetUniformMat4f("u_Model", wallModel);;
         collTex.Bind(6);

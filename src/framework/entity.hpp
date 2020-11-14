@@ -38,6 +38,8 @@ namespace framework {
 		Entity(glm::vec3 pos, const std::string& modelpath);
 
 		inline void SetRotationAxis(glm::vec3 rotationAxis) { this->rotationAxis = rotationAxis; }	// Setter for rotation axis vector
+
+		inline GLfloat GetRotation() const { return rotation; }
 		inline void SetRotation(GLfloat rotation) { this->rotation = rotation; }					// Setter for rotation in degrees
 
 		inline void SetScale(glm::vec3 scale) { this->scale = scale; }								// Setter for scale vector
