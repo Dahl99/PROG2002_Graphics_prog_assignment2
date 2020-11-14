@@ -110,7 +110,7 @@ int main()
      *  As well as view and projection matrices for everything
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-    auto view = glm::lookAt(glm::vec3(14.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    auto view = glm::lookAt(glm::vec3(14.f, 40.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
     framework::Shader shader(framework::VERTGSHADERPATH, framework::FRAGSHADERPATH);
 

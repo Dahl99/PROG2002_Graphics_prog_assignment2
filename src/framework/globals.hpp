@@ -31,7 +31,7 @@ namespace framework {
 	const std::string FRAGSHADERPATH = "../res/shaders/shader.frag";
 
 	const std::string SOUNDTRACKPATH = "../res/music/pacman.wav";
-	const float MUSICVOLUME = 0.0f;
+	const float MUSICVOLUME = 0.2f;
 
 	const int WINDOWSIZEX = 1280, WINDOWSIZEY = 720;
 	const float COLLECTIBLESIZE = 0.35f;
