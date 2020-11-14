@@ -143,7 +143,7 @@ namespace framework {
 				temp.pos.y = 0;
 				temp.pos.z = (zPos)+COLLECTIBLESIZE;
 
-				playerPos = glm::vec3((float)(i % sizeX), 0.f, (float)zPos);
+				playerPos = glm::vec3((float)(i % sizeX), 1.6f, (float)zPos);
 
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
@@ -232,9 +232,9 @@ namespace framework {
 
 		for (int i = 0; i < NUMGHOSTS; i++)
 		{
-			const auto temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 24)].pos;
+			const auto& temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 24)].pos;
 
-			characterPositions.push_back(temp);
+			characterPositions.push_back(glm::vec3(temp.x, 1.6f, temp.z));
 		}
 		return mapVertices;
 	}

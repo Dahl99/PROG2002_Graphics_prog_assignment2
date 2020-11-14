@@ -126,13 +126,13 @@ int main()
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
 
-    const auto characterPositions = map1.GetPGPos();    // Getting player and ghost positions
+    const auto& characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
     // Loading textures for pacman characters and adding them to a vector
     std::vector<std::shared_ptr<framework::Texture>> pacmanTextures;
     for (const auto& texPath : framework::PACMANPICTUREPATHS)
     {
-        const auto temp = std::make_shared<framework::Texture>(texPath);
+        const auto& temp = std::make_shared<framework::Texture>(texPath);
         pacmanTextures.push_back(temp);
     }
 
@@ -140,7 +140,8 @@ int main()
     std::vector<std::shared_ptr<framework::Entity>> pacmanEntities;
     for (const auto& modelPath : framework::PACMANMODELPATHS)
     {
-        const auto temp = std::make_shared<framework::Entity>(characterPositions.front(), modelPath);
+        auto& temp = std::make_shared<framework::Entity>(characterPositions.front(), modelPath);
+        temp->SetScale(glm::vec3(0.5f));
         pacmanEntities.push_back(temp);
     }
 
@@ -148,24 +149,21 @@ int main()
     std::vector<std::shared_ptr<framework::Texture>> ghostTextures;
     for (int i = 0; i < framework::NUMGHOSTS; i++)
     {
-        const auto temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
+        const auto& temp = std::make_shared<framework::Texture>(framework::GHOSTTEXTURES[i]);
         ghostTextures.push_back(temp);
     }
-
-
-    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
-    collTex.Bind(6);
-
-
-    framework::Entity pacman(characterPositions.front(), framework::PACMANMODELPATHS[0]);  // Creating pacman entity with model
 
     // Creating ghosts using model
     std::vector<std::shared_ptr<framework::Entity>> ghosts;
     for (auto it = characterPositions.begin() + 1; it != characterPositions.end(); it++)
     {
-        auto ghost = std::make_shared<framework::Entity>(*it, framework::GHOSTMODELPATH);
+        auto& ghost = std::make_shared<framework::Entity>(*it, framework::GHOSTMODELPATH);
+        ghost->SetScale(glm::vec3(0.5f));
         ghosts.push_back(ghost);
     }
+
+    framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
+    collTex.Bind(6);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -201,6 +199,8 @@ int main()
             pacmanEntities.front()->Move(dt, framework::Direction::LEFT);
             pacmanEntities.front()->SetRotation(180.f);
         }
+        pacmanEntities.back()->SetPosition(pacmanEntities.front()->GetPosition());
+        pacmanEntities.back()->SetRotation(pacmanEntities.front()->GetRotation());
 
 
         shader.SetUniformMat4f("u_Model", tileModelMatrix);
@@ -218,8 +218,6 @@ int main()
         else if (pacmanAnimTimer < 3.0f)
         {
             pacmanTextures.back()->Bind(1);
-            pacmanEntities.back()->SetPosition(pacmanEntities.front()->GetPosition());
-            pacmanEntities.back()->SetRotation(pacmanEntities.front()->GetRotation());
             pacmanEntities.back()->Draw(shader, view, proj);
             pacmanAnimTimer += 0.05f;
 
