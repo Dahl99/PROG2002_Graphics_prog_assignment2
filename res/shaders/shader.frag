@@ -30,13 +30,11 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos);
 
 void main()
 {
-	vec3 lightColor = vec3(1.0);
-
 	/** Texture */
 	vec4 texColor = texture(u_Texture, v_TexCoords);
 
+	/** Calculating lighting from all point lights */
 	vec3 phong;
-
 	for(int i = 0; i < NR_POINT_LIGHTS; i++)
 		phong += CalcPointLight(u_PointLights[i], v_Normal, v_FragPos, u_ViewPos);
 
