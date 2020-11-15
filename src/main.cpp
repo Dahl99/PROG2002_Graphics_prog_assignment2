@@ -111,8 +111,8 @@ int main()
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
 
-    //glm::vec3 viewPos(14.f, 20.f, -10.f);
-    glm::vec3 viewPos(14.f, 50.f, 0.f);
+    glm::vec3 viewPos(14.f, 20.f, -10.f);
+    //glm::vec3 viewPos(14.f, 50.f, 0.f);
 
 
     //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
@@ -206,22 +206,22 @@ int main()
                 pacmanEntities[0]->SetRotation(90.f);
             }
         }
-        // Strafe left
+        // Strafe right
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x - 1)] != 1)
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::LEFT);
                 pacmanEntities[0]->SetRotation(180.f);
             }
         }
-        // Strafe right
+        // Strafe left
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)]
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x + 0.1)]
                 != 1 && 
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)]
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x + 0.1)]
                 != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
