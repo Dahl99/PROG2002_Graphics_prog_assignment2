@@ -112,17 +112,7 @@ int main()
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
 
     glm::vec3 viewPos(14.f, 20.f, -10.f);
-
-    //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(14.f, 8.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(14.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    //auto view = glm::lookAt(glm::vec3(44.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 
@@ -132,9 +122,15 @@ int main()
     shader.Bind();
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
-    shader.SetUniform1f("u_Constant", 1.0f);
-    shader.SetUniform1f("u_Linear", 0.09f);
-    shader.SetUniform1f("u_Quadratic", 0.032f);
+
+    for (int i = 0; i < framework::NUMGHOSTS + 1; i++)
+    {
+        shader.SetUniform3fv("u_PointLights[" + std::to_string(i) + "].color", glm::vec3(1.0f));
+        shader.SetUniform1f("u_PointLights[" + std::to_string(i) + "].constant", 1.0f);
+        shader.SetUniform1f("u_PointLights[" + std::to_string(i) + "].linear", 0.14f);
+        shader.SetUniform1f("u_PointLights[" + std::to_string(i) + "].quadratic", 0.07f);
+    }
+
     lightSrcShader.Bind();
     lightSrcShader.SetUniformMat4f("u_View", view);
     lightSrcShader.SetUniformMat4f("u_Projection", proj);
@@ -231,8 +227,12 @@ int main()
 
         shader.Bind();
         shader.SetUniformMat4f("u_Model", tileModelMatrix);
-        shader.SetUniform3fv("u_LightSrcPos", pacmanEntities[0]->GetPosition());
         shader.SetUniform3fv("u_ViewPos", viewPos);
+
+        shader.SetUniform3fv("u_PointLights[0].position", pacmanEntities[0]->GetPosition());
+        for (int i = 0; i < framework::NUMGHOSTS; i++)
+            shader.SetUniform3fv("u_PointLights[" + std::to_string(i+1) + "].position", ghosts[i]->GetPosition());
+
         wallTex.Bind();
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
