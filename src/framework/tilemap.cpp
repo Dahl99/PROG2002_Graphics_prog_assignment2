@@ -73,27 +73,23 @@ namespace framework {
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
-					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
+					if (map[i - 1].model->m_Vertices[j].pos.x < 0)
+						map[i - 1].model->m_Vertices[j].pos.x = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.x = 0.15;
+
+					if (map[i - 1].model->m_Vertices[j].pos.y < 0)
+						map[i - 1].model->m_Vertices[j].pos.y = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.y = 0.15;
+
+					if (map[i - 1].model->m_Vertices[j].pos.z < 0)
+						map[i - 1].model->m_Vertices[j].pos.z = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.z = 0.15;
+
+
+					map[i - 1].model->m_Vertices[j].pos += temp.pos;
 					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
-					//if (map[i - 1].model->m_Vertices[j].pos.z < 0)
-					//	map[i - 1].model->m_Vertices[j].pos.y = 0;
-					//else map[i - 1].model->m_Vertices[j].pos.y = 1;
-					////map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					//map[i - 1].model->m_Vertices[j].pos.z = tempo;
 				}
-				//// Bottom right vertex
-				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].botRight.pos.y = (zPos)+COLLECTIBLESIZE;
 
-
-				//// Top left vertex
-				//map[i - 1].topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				//map[i - 1].topLeft.pos.y = (zPos + 1) - COLLECTIBLESIZE;
-
-
-				//// Top right vertex
-				//map[i - 1].topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].topRight.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 				break;
 
@@ -110,26 +106,8 @@ namespace framework {
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{	
-					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
-					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
-					//if (map[i - 1].model->m_Vertices[j].pos.z < 0)
-					//	map[i - 1].model->m_Vertices[j].pos.y = 0;
-					//else map[i - 1].model->m_Vertices[j].pos.y = 1;
-					////map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					//map[i - 1].model->m_Vertices[j].pos.z = tempo;
+					map[i - 1].model->m_Vertices[j].pos += temp.pos;
 				}
-				//// Bottom right vertex
-				//map[i - 1].botRight.pos.x = ((i - 1) % sizeX) + 1;
-				//map[i - 1].botRight.pos.y = zPos;
-
-
-				//// Top left vertex
-				//map[i - 1].topLeft.pos.x = (i - 1) % sizeX;
-				//map[i - 1].topLeft.pos.y = zPos + 1;
-
-				//// Top right vertex
-				//map[i - 1].topRight.pos.x = ((i - 1) % sizeX) + 1;
-				//map[i - 1].topRight.pos.y = zPos + 1;
 
 				break;
 
@@ -139,36 +117,31 @@ namespace framework {
 				
 
 				// Bottom left vertex
-				temp.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
+				temp.pos.x = ((i - 1) % sizeX);
 				temp.pos.y = 0;
-				temp.pos.z = (zPos)+COLLECTIBLESIZE;
+				temp.pos.z = (zPos);
 
-				playerPos = glm::vec3((float)(i % sizeX), 0.f, (float)zPos);
+				playerPos = glm::vec3((float)((i - 1)% sizeX), 1.5f, (float)zPos);
 
 				map[i - 1].pos = temp.pos;
 				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
 
 				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
 				{
-					map[i - 1].model->m_Vertices[j].pos += temp.pos + 0.5f;
-					/*float tempo = map[i - 1].model->m_Vertices[j].pos.y;
-					map[i - 1].model->m_Vertices[j].pos.y = map[i - 1].model->m_Vertices[j].pos.z;
-					map[i - 1].model->m_Vertices[j].pos.z = tempo;*/
+					if (map[i - 1].model->m_Vertices[j].pos.x < 0)
+						map[i - 1].model->m_Vertices[j].pos.x = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.x = 0.15;
+
+					if (map[i - 1].model->m_Vertices[j].pos.y < 0)
+						map[i - 1].model->m_Vertices[j].pos.y = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.y = 0.15;
+
+					if (map[i - 1].model->m_Vertices[j].pos.z < 0)
+						map[i - 1].model->m_Vertices[j].pos.z = -0.15f;
+					else map[i - 1].model->m_Vertices[j].pos.z = 0.15;
+					
+					map[i - 1].model->m_Vertices[j].pos += temp.pos;
 				}
-
-				//// Bottom right vertex
-				//map[i - 1].botRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].botRight.pos.y = (zPos)+COLLECTIBLESIZE;
-
-
-				//// Top left vertex
-				//map[i - 1].topLeft.pos.x = ((i - 1) % sizeX) + COLLECTIBLESIZE;
-				//map[i - 1].topLeft.pos.y = (zPos + 1) - COLLECTIBLESIZE;
-
-
-				//// Top right vertex
-				//map[i - 1].topRight.pos.x = (((i - 1) % sizeX) + 1) - COLLECTIBLESIZE;
-				//map[i - 1].topRight.pos.y = (zPos + 1) - COLLECTIBLESIZE;
 
 				break;
 			default:
