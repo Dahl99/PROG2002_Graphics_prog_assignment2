@@ -2,7 +2,6 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <string>
-#include <memory>
 #include <vector>
 
 namespace framework {
@@ -28,12 +27,10 @@ namespace framework {
 	const std::string COLLECTIBLEPICTUREPATH = "../res/models/cube/SlimeTexture.png";
 	const std::string COLLECTIBLEMODELPATH = "../res/models/cube/collectible.obj";
 
-
-	const std::string TILEVERTSHADERPATH = "../res/shaders/tile.vert";
-	const std::string TILEFRAGSHADERPATH = "../res/shaders/tile.frag";
-
-	const std::string VERTGSHADERPATH = "../res/shaders/shader.vert";
+	const std::string VERTSHADERPATH = "../res/shaders/shader.vert";
 	const std::string FRAGSHADERPATH = "../res/shaders/shader.frag";
+	const std::string VERTLIGHTSRCSHADERPATH = "../res/shaders/lightsrc.vert";
+	const std::string FRAGLIGHTSRCSHADERPATH = "../res/shaders/lightsrc.frag";
 
 	const std::string SOUNDTRACKPATH = "../res/music/pacman.wav";
 	const float MUSICVOLUME = 0.2f;

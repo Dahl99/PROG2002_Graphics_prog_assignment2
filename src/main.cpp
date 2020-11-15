@@ -108,21 +108,27 @@ int main()
 
     /** Creating model matrix for walls and collectibles
      *  As well as view and projection matrices for everything
-     */   
+     */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-    
+
+    glm::vec3 viewPos(14.f, 20.f, 44.f);
     //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
-    auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+    auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     //auto view = glm::lookAt(glm::vec3(14.f, 8.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     //auto view = glm::lookAt(glm::vec3(14.f, 15.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
 
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
 
-    framework::Shader shader(framework::VERTGSHADERPATH, framework::FRAGSHADERPATH);
+    framework::Shader shader(framework::VERTSHADERPATH, framework::FRAGSHADERPATH);
+    framework::Shader lightSrcShader(framework::VERTLIGHTSRCSHADERPATH, framework::FRAGLIGHTSRCSHADERPATH);
 
+    shader.Bind();
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
+    lightSrcShader.Bind();
+    lightSrcShader.SetUniformMat4f("u_View", view);
+    lightSrcShader.SetUniformMat4f("u_Projection", proj);
 
     const auto& characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
@@ -191,21 +197,23 @@ int main()
         pacmanEntities[1]->SetPosition(pacmanEntities[0]->GetPosition());
         pacmanEntities[1]->SetRotation(pacmanEntities[0]->GetRotation());
 
-
+        shader.Bind();
         shader.SetUniformMat4f("u_Model", tileModelMatrix);
+        shader.SetUniform3fv("u_LightSrcPos", pacmanEntities[0]->GetPosition());
+        shader.SetUniform3fv("u_ViewPos", viewPos);
         wallTex.Bind();
         renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
 
         if (pacmanAnimTimer < 1.5f)
         {
             pacmanTextures[0]->Bind();
-            pacmanEntities[0]->Draw(shader, view, proj);
+            pacmanEntities[0]->Draw(lightSrcShader, view, proj);
             pacmanAnimTimer += 0.05f;
         }
         else if (pacmanAnimTimer < 3.0f)
         {
             pacmanTextures[1]->Bind();
-            pacmanEntities[1]->Draw(shader, view, proj);
+            pacmanEntities[1]->Draw(lightSrcShader, view, proj);
             pacmanAnimTimer += 0.05f;
 
             if (pacmanAnimTimer >= 3.0f)
@@ -219,6 +227,7 @@ int main()
             ghosts[i]->Draw(shader, view, proj);
         }
 
+        shader.Bind();
         shader.SetUniformMat4f("u_Model", tileModelMatrix);
         collTex.Bind();
         renderer.Draw(collVao, collIbo, shader);
