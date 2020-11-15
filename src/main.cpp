@@ -111,6 +111,7 @@ int main()
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
 
+
     glm::vec3 viewPos(14.f, 20.f, -10.f);
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
@@ -183,8 +184,8 @@ int main()
         // Move uprward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x +          0.1)] != 1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x +          0.1)] != 1 &&
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::FORWARD);
                 pacmanEntities[0]->SetRotation(270.f);
@@ -193,8 +194,8 @@ int main()
         // Move downward
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.1)] !=     1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)] != 1 &&
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::BACK);
                 pacmanEntities[0]->SetRotation(90.f);
@@ -203,8 +204,8 @@ int main()
         // Strafe left
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)] !=     1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)] != 1)
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x - 1)] != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::LEFT);
                 pacmanEntities[0]->SetRotation(180.f);
@@ -213,9 +214,9 @@ int main()
         // Strafe right
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 1)]
+            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)]
                 != 1 && 
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z + 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 1)]
+                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)]
                 != 1)
             {
                 pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
