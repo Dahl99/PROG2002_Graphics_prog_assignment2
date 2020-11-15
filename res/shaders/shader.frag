@@ -1,53 +1,46 @@
 #version 430 core
 
 /** Inputs */
+in vec3 v_Normal;
 in vec2 v_TexCoords;
+in vec3 v_FragPos;
 
 /** Outputs */
 out vec4 FragColor;
 
 /** Uniforms */
-layout(binding = 0) uniform sampler2D u_Texture0;
-layout(binding = 1) uniform sampler2D u_Texture1;
-layout(binding = 2) uniform sampler2D u_Texture2;
-layout(binding = 3) uniform sampler2D u_Texture3;
-layout(binding = 4) uniform sampler2D u_Texture4;
-layout(binding = 5) uniform sampler2D u_Texture5;
-layout(binding = 6) uniform sampler2D u_Texture6;
-uniform int numTex;
+layout(binding = 0) uniform sampler2D u_Texture;
+uniform vec3 u_LightSrcPos;
+uniform vec3 u_ViewPos;
+
 
 void main()
 {
-	vec4 texColor;
+	vec3 lightColor = vec3(1.0);
 
-	if(numTex == 0)
-	{
-		texColor = texture(u_Texture0, v_TexCoords);
-	}
-	else if(numTex == 1)
-	{
-		texColor = texture(u_Texture1, v_TexCoords);
-	}
-	else if(numTex == 2)
-	{
-		texColor = texture(u_Texture2, v_TexCoords);
-	}
-	else if(numTex == 3)
-	{
-		texColor = texture(u_Texture3, v_TexCoords);
-	}
-	else if(numTex == 4)
-	{
-		texColor = texture(u_Texture4, v_TexCoords);
-	}
-	else if(numTex == 5)
-	{
-		texColor = texture(u_Texture5, v_TexCoords);
-	}	
-	else if(numTex == 6)
-	{
-		texColor = texture(u_Texture6, v_TexCoords);
-	}
+	/** Texture */
+	vec4 texColor = texture(u_Texture, v_TexCoords);
 
-	FragColor = texColor;
+	/** Ambient Lighting */
+	float ambientStrength = 0.1;
+	vec3 ambient = ambientStrength * lightColor;
+
+	/** Diffuse Lighting */
+	vec3 norm = normalize(v_Normal);
+	vec3 lightDir = normalize(u_LightSrcPos - v_FragPos);
+	float diff = max(dot(norm, lightDir), 0.0);
+	vec3 diffuse = diff * lightColor;
+
+	/** Specular Lighting */
+	float specularStrength = 0.5;
+	int shininess = 32;
+	vec3 viewDir = normalize(u_ViewPos - v_FragPos);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+	vec3 specular = specularStrength * spec * lightColor;
+
+	/** Phong Lighting Model */
+	vec3 result = (ambient + diffuse + specular) * texColor.xyz;
+
+	FragColor = vec4(result, 1.0);
 }
