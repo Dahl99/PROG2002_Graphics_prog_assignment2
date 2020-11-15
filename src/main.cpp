@@ -82,6 +82,8 @@ int main()
     static GLfloat dt, curTime, lastTime, pacmanAnimTimer;
     dt = curTime = lastTime = pacmanAnimTimer = 0.0f;
 
+    static int pelletsCollected = 0;
+
     framework::ShaderVertData vertices = map1.RetMapVertices();
     framework::IndiceData indices = map1.RetMapIndices();
 
@@ -110,7 +112,6 @@ int main()
      *  As well as view and projection matrices for everything
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-
 
     glm::vec3 viewPos(14.f, 20.f, -10.f);
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
@@ -166,6 +167,18 @@ int main()
 
     framework::Texture collTex(framework::COLLECTIBLEPICTUREPATH);
 
+
+    // ImGui setup
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 430 core");
+
+    ImGuiWindowFlags window_flags = 0;
+    window_flags |= ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoDecoration;
+    window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+
     while (!glfwWindowShouldClose(window))
     {
         //                   Preparation
@@ -174,6 +187,15 @@ int main()
 
         renderer.Clear();   // Clearing screen
 
+        // Creating ImGui textbox for displaying current score
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::Begin("Score", NULL, window_flags);
+        ImGui::Text("Current score: %d", pelletsCollected * framework::COLLECTIBLESCORE);
+        ImGui::End();
 
         //                              Draw calls
 
@@ -265,11 +287,18 @@ int main()
         collTex.Bind();
         renderer.Draw(collVao, collIbo, shader);
 
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
 
         // Exit the loop if escape is pressed
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) break;
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwTerminate();
 
