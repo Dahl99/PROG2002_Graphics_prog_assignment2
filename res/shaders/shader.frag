@@ -12,6 +12,9 @@ out vec4 FragColor;
 layout(binding = 0) uniform sampler2D u_Texture;
 uniform vec3 u_LightSrcPos;
 uniform vec3 u_ViewPos;
+uniform float u_Constant;
+uniform float u_Linear;
+uniform float u_Quadratic;
 
 
 void main()
@@ -38,6 +41,14 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 	vec3 specular = specularStrength * spec * lightColor;
+
+	/** Attenuation */
+	float distance = length(u_LightSrcPos - v_FragPos);
+	float attenuation = 1.0 / (u_Constant + u_Linear * distance + u_Quadratic * (distance * distance));
+
+	ambient  *= attenuation;
+	diffuse  *= attenuation;
+	specular *= attenuation;
 
 	/** Phong Lighting Model */
 	vec3 result = (ambient + diffuse + specular) * texColor.xyz;

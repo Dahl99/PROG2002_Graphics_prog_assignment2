@@ -110,8 +110,11 @@ int main()
      *  As well as view and projection matrices for everything
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
-    
+
     glm::vec3 viewPos(14.f, 20.f, -10.f);
+
+    //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
+
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     //auto view = glm::lookAt(glm::vec3(14.f, 50.f, 24.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     //auto view = glm::lookAt(glm::vec3(14.f, 0.f, 44.f), { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
@@ -129,6 +132,9 @@ int main()
     shader.Bind();
     shader.SetUniformMat4f("u_View", view);
     shader.SetUniformMat4f("u_Projection", proj);
+    shader.SetUniform1f("u_Constant", 1.0f);
+    shader.SetUniform1f("u_Linear", 0.09f);
+    shader.SetUniform1f("u_Quadratic", 0.032f);
     lightSrcShader.Bind();
     lightSrcShader.SetUniformMat4f("u_View", view);
     lightSrcShader.SetUniformMat4f("u_Projection", proj);

@@ -37,6 +37,11 @@ namespace framework
 		glUniform1i(getUniformLocation(name), value);
 	}
 
+	void Shader::SetUniform1f(const std::string& name, float value)
+	{
+		glUniform1f(getUniformLocation(name), value);
+	}
+
 	void Shader::SetUniform2fv(const std::string& name, const float values[2])
 	{
 		glUniform2fv(getUniformLocation(name), 1, &values[0]);
