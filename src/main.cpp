@@ -139,23 +139,23 @@ int main()
     const auto& characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
     // Loading both pacman models and their texture
-    std::shared_ptr<framework::Texture> pacmanTextures[2];
-    std::shared_ptr<framework::Entity> pacmanEntities[2];
+    std::unique_ptr<framework::Texture> pacmanTextures[2];
+    std::unique_ptr<framework::Entity> pacmanEntities[2];
     for (int i = 0; i < 2; i++)
     {
-        pacmanTextures[i] = std::make_shared<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
-        pacmanEntities[i] = std::make_shared<framework::Entity>(characterPositions.front(), framework::PACMANMODELPATHS[i]);
+        pacmanTextures[i] = std::make_unique<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
+        pacmanEntities[i] = std::make_unique<framework::Entity>(characterPositions.front(), framework::PACMANMODELPATHS[i]);
         pacmanEntities[i]->SetScale(glm::vec3(0.5f));
     }
 
     // Loading ghosts and their textures
-    std::shared_ptr<framework::Texture> ghostTextures[framework::NUMGHOSTS];
+    std::unique_ptr<framework::Texture> ghostTextures[framework::NUMGHOSTS];
     std::unique_ptr<framework::Model> ghostModel = std::make_unique<framework::Model>(framework::GHOSTMODELPATH);
-    std::shared_ptr<framework::Entity> ghosts[framework::NUMGHOSTS];
+    std::unique_ptr<framework::Entity> ghosts[framework::NUMGHOSTS];
     for (int i = 0; i < framework::NUMGHOSTS; i++)
     {
-        ghostTextures[i] = std::make_shared<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
-        ghosts[i] = std::make_shared<framework::Entity>(characterPositions.at(i+1), ghostModel->GetVertices(), ghostModel->GetIndices());
+        ghostTextures[i] = std::make_unique<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
+        ghosts[i] = std::make_unique<framework::Entity>(characterPositions.at(i+1), ghostModel->GetVertices(), ghostModel->GetIndices());
         ghosts[i]->SetScale(glm::vec3(0.5f));
     }
 
