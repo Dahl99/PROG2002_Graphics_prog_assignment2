@@ -1,5 +1,17 @@
 #version 430 core
 
+/** Structs */
+struct PointLight {
+	vec3 position;
+	vec3 color;
+
+	float constant;
+	float linear;
+	float quadratic;
+};
+
+#define NR_POINT_LIGHTS 5
+
 /** Inputs */
 in vec3 v_Normal;
 in vec2 v_TexCoords;
@@ -10,48 +22,54 @@ out vec4 FragColor;
 
 /** Uniforms */
 layout(binding = 0) uniform sampler2D u_Texture;
-uniform vec3 u_LightSrcPos;
 uniform vec3 u_ViewPos;
-uniform float u_Constant;
-uniform float u_Linear;
-uniform float u_Quadratic;
+uniform PointLight u_PointLights[NR_POINT_LIGHTS];
 
+/** Functions */
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos);
 
 void main()
 {
-	vec3 lightColor = vec3(1.0);
-
 	/** Texture */
 	vec4 texColor = texture(u_Texture, v_TexCoords);
 
-	/** Ambient Lighting */
+	/** Calculating lighting from all point lights */
+	vec3 phong;
+	for(int i = 0; i < NR_POINT_LIGHTS; i++)
+		phong += CalcPointLight(u_PointLights[i], v_Normal, v_FragPos, u_ViewPos);
+
+	vec3 result = (phong.x + phong.y + phong.z) * texColor.xyz;
+
+	FragColor = vec4(result, 1.0);
+}
+
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos)
+{
+   /** Ambient Lighting */
 	float ambientStrength = 0.1;
-	vec3 ambient = ambientStrength * lightColor;
+	vec3 ambient = ambientStrength * light.color;
 
 	/** Diffuse Lighting */
 	vec3 norm = normalize(v_Normal);
-	vec3 lightDir = normalize(u_LightSrcPos - v_FragPos);
+	vec3 lightDir = normalize(light.position - fragPos);
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightColor;
+	vec3 diffuse = diff * light.color;
 
 	/** Specular Lighting */
 	float specularStrength = 0.5;
 	int shininess = 32;
-	vec3 viewDir = normalize(u_ViewPos - v_FragPos);
+	vec3 viewDir = normalize(viewPos - fragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specular = specularStrength * spec * lightColor;
+	vec3 specular = specularStrength * spec * light.color;
 
 	/** Attenuation */
-	float distance = length(u_LightSrcPos - v_FragPos);
-	float attenuation = 1.0 / (u_Constant + u_Linear * distance + u_Quadratic * (distance * distance));
+	float distance = length(light.position - fragPos);
+	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
 	ambient  *= attenuation;
 	diffuse  *= attenuation;
 	specular *= attenuation;
 
-	/** Phong Lighting Model */
-	vec3 result = (ambient + diffuse + specular) * texColor.xyz;
-
-	FragColor = vec4(result, 1.0);
-}
+    return (ambient + diffuse + specular);
+} 

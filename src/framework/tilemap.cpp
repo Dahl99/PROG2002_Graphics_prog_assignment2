@@ -208,7 +208,7 @@ namespace framework {
 		{
 			const auto& temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 24)].pos;
 
-			characterPositions.push_back(glm::vec3(temp.x, 1.6f, temp.z));
+			characterPositions.push_back(glm::vec3(temp.x, 1.6f, temp.z + 1));
 		}
 		return mapVertices;
 	}

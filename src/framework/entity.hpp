@@ -22,7 +22,7 @@ namespace framework {
 
 	class Entity 
 	{
-	private:
+	protected:
 		glm::vec3 position, rotationAxis, scale;
 		GLfloat mvSpeed, rotation;
 		GLboolean isVulnerable;
