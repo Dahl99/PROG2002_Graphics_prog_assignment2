@@ -25,7 +25,7 @@
 #include "ghost.hpp"
 
 // Function declarations
-GLFWwindow* initWindow();
+GLFWwindow* initWindow(const std::string& title = "Window");
 
 void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt);
 bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int zPos);
@@ -52,7 +52,7 @@ int main()
 {
     glfwSetErrorCallback(GLFWErrorCallback);
 
-    auto window = initWindow();
+    auto window = initWindow("3D Pacman");
     if (window == nullptr)
     {
         glfwTerminate();
@@ -66,8 +66,8 @@ int main()
 
 
     // Reading and creating the map
-    //framework::Map map1(framework::LEVELPATH0);
-    framework::Map map1(framework::LEVELPATH1);
+    framework::Map map1(framework::LEVELPATH0);
+    //framework::Map map1(framework::LEVELPATH1);
     map1.PrintMap();
 
     static framework::Renderer renderer;
@@ -103,7 +103,6 @@ int main()
     framework::Texture wallTex(framework::WALLPICTUREPATH);
 
     //                      Preparing collectibles
-
     framework::VertexArray collVao;
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
@@ -121,7 +120,7 @@ int main()
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
-
+    // Creating shaders and setting most uniforms
     framework::Shader shader(framework::VERTSHADERPATH, framework::FRAGSHADERPATH);
     framework::Shader lightSrcShader(framework::VERTLIGHTSRCSHADERPATH, framework::FRAGLIGHTSRCSHADERPATH);
 
@@ -143,29 +142,25 @@ int main()
 
     const auto& characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
-    // Loading textures for pacman models
-    std::shared_ptr<framework::Texture> pacmanTextures[2];
-    for (int i = 0; i < 2; i++)
-        pacmanTextures[i] = std::make_shared<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
-
-    // Loading both pacman models
-    std::shared_ptr<framework::Entity> pacmanEntities[2];
+    // Loading both pacman models and their texture
+    std::unique_ptr<framework::Texture> pacmanTextures[2];
+    std::unique_ptr<framework::Entity> pacmanEntities[2];
     for (int i = 0; i < 2; i++)
     {
-        pacmanEntities[i] = std::make_shared<framework::Entity>(characterPositions.front(), framework::PACMANMODELPATHS[i]);
+        pacmanTextures[i] = std::make_unique<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
+        pacmanEntities[i] = std::make_unique<framework::Entity>(characterPositions.front(), framework::PACMANMODELPATHS[i]);
         pacmanEntities[i]->SetScale(glm::vec3(0.5f));
     }
 
-    // Loading textures for ghosts
-    std::shared_ptr<framework::Texture> ghostTextures[framework::NUMGHOSTS];
-    for (int i = 0; i < framework::NUMGHOSTS; i++)
-        ghostTextures[i] = std::make_shared<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
 
-    // Creating ghosts using model
-    std::shared_ptr<Ghost> ghosts[framework::NUMGHOSTS];
+    // Loading ghosts and their textures
+    std::unique_ptr<framework::Texture> ghostTextures[framework::NUMGHOSTS];
+    std::unique_ptr<framework::Model> ghostModel = std::make_unique<framework::Model>(framework::GHOSTMODELPATH);
+    std::unique_ptr<Ghost> ghosts[framework::NUMGHOSTS];
     for (int i = 0; i < framework::NUMGHOSTS; i++)
     {
-        ghosts[i] = std::make_shared<Ghost>(characterPositions.at(i+1), framework::GHOSTMODELPATH);
+        ghostTextures[i] = std::make_unique<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
+        ghosts[i] = std::make_unique<Ghost>(characterPositions.at(i+1), ghostModel->GetVertices(), ghostModel->GetIndices());
         ghosts[i]->SetScale(glm::vec3(0.5f));
     }
 
@@ -206,13 +201,8 @@ int main()
             pelletsCollected++;
             collVbo.UpdateData(vertices.collectibleVertices);
         }
-        
-
-
-        //collVbo.UpdateData(vertices.collectibleVertices);
-        //renderer.Draw(collVao, collIbo, tileShader);
  
-        //int x = (int)map1.GetArray()[(pacmanEntities[0]->GetPosition().z + 1) * map1.GetSizeX()];
+
         // Move upward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 
@@ -266,9 +256,7 @@ int main()
         for (int i = 0; i < framework::NUMGHOSTS; i++)
             shader.SetUniform3fv("u_PointLights[" + std::to_string(i+1) + "].position", ghosts[i]->GetPosition());
 
-        wallTex.Bind();
-        renderer.Draw(tileVao, tileIbo, shader);    // Drawing map
-
+        // Pacman animation logic
         if (pacmanAnimTimer < 1.5f)
         {
             pacmanTextures[0]->Bind();
@@ -285,7 +273,7 @@ int main()
                 pacmanAnimTimer = 0.0f;
         }
 
-
+        // Drawing ghosts
         for (int i = 0; i < framework::NUMGHOSTS; i++)
         {
             ghostTextures[i]->Bind();
@@ -295,6 +283,10 @@ int main()
 
         shader.Bind();
         shader.SetUniformMat4f("u_Model", tileModelMatrix);
+
+        // Drawing walls and collectibles
+        wallTex.Bind();
+        renderer.Draw(tileVao, tileIbo, shader);
         collTex.Bind();
         renderer.Draw(collVao, collIbo, shader);
 
@@ -322,7 +314,7 @@ int main()
 //------------------------------------------------------------------------------------------
 
 // GLFW and window initialization
-GLFWwindow* initWindow()
+GLFWwindow* initWindow(const std::string& title)
 {
     if (!glfwInit())
     {
@@ -336,7 +328,7 @@ GLFWwindow* initWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(framework::WINDOWSIZEX, framework::WINDOWSIZEY, "2D PacMan", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(framework::WINDOWSIZEX, framework::WINDOWSIZEY, title.c_str(), nullptr, nullptr);
     if (window == nullptr)
     {
         glfwTerminate();

@@ -11,7 +11,7 @@ namespace framework
 		ibo = std::make_unique<IndexBuffer>(indices);	// Initializing ibo
 
 		framework::VertexBufferLayout vbl;          // Create a vertex buffer layout
-		vbl.Push<GLfloat>(2);                       // Adding position floats to layout
+		vbl.Push<GLfloat>(3);                       // Adding position floats to layout
 		vbl.Push<GLfloat>(3);                       // Adding color floats to layout
 		vbl.Push<GLfloat>(2);                       // Adding tex coords floats to layout
 

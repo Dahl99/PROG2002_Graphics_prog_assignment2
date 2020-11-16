@@ -166,24 +166,28 @@ void Ghost::GhostMovement(const glm::vec3& pacPos, const std::vector<int>& mapAr
 	temp.y = 0;
 
 	// If x distance is closer to pacman than z distance and not just paralel
-	if (temp.x < temp.z && temp.x != 0)
+	if (temp.x < temp.z || (temp.z < 0.1 && temp.z > -0.1))
 	{
 		// If x is negative
 		if (target.x <= 0)
 		{
 			// Move right
-			if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
+			if (mapArray[((int)(position.z - 1) * mapSizeX) + position.x - 1] != 1)
 				position.x += dt * mvSpeed;
 			// If cant move to the left, move up or down depending on which is closest
 			else if (target.z <= 0) // Needs change
 			{
-				if (mapArray[((position.z + 1) * mapSizeX) + position.x] != 1)
+				if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
 					position.z += dt * mvSpeed;
+				else if (mapArray[((int)(position.z) * mapSizeX) + position.x] != 1)
+					position.z -= dt * mvSpeed;
 			}
 			else
 			{
-				if (mapArray[((position.z) * mapSizeX) + position.x] != 1)
+				if (mapArray[((int)(position.z) * mapSizeX) + position.x] != 1)
 					position.z -= dt * mvSpeed;
+				else if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
+					position.z += dt * mvSpeed;
 			}
 		}
 		else // If x is positive
@@ -194,11 +198,18 @@ void Ghost::GhostMovement(const glm::vec3& pacPos, const std::vector<int>& mapAr
 			// If cant move to the left, move up or down depending on which is closest
 			else if (target.z <= 0)
 			{
-				if (mapArray[((position.z + 1) * mapSizeX) + position.x] != 1)
+				if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
+					position.z += dt * mvSpeed;
+				else if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
+					position.z -= dt * mvSpeed;
+			}
+			else
+			{
+				if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
+					position.z -= dt * mvSpeed;
+				else if (mapArray[((int)(position.z + 1) * mapSizeX) + position.x] != 1)
 					position.z += dt * mvSpeed;
 			}
-			else if (mapArray[((position.z + 1) * mapSizeX) + position.x] != 1)
-				position.z -= dt * mvSpeed;
 		}
 	}
 	else // If z is closer
@@ -215,15 +226,22 @@ void Ghost::GhostMovement(const glm::vec3& pacPos, const std::vector<int>& mapAr
 			{
 				if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x] != 1)
 					position.x -= dt * mvSpeed;
+				else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
+					position.x += dt * mvSpeed;
 			}
-			else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
-				position.x += dt * mvSpeed;
+			else
+			{
+				if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
+					position.x += dt * mvSpeed;
+				else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x] != 1)
+					position.x -= dt * mvSpeed;
+			}
 
 		}
 		else // If z is greater than 0
 		{
 			// Move up if possible
-			if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x] != 1)
+			if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
 				position.z += dt * mvSpeed;
 
 			// Otherwise right or left depending on which is closer
@@ -231,9 +249,16 @@ void Ghost::GhostMovement(const glm::vec3& pacPos, const std::vector<int>& mapAr
 			{
 				if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x] != 1)
 					position.x -= dt * mvSpeed;
+				else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
+					position.x += dt * mvSpeed;
 			}
-			else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
-				position.x += dt * mvSpeed;
+			else
+			{
+				if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x - 1] != 1)
+					position.x += dt * mvSpeed;
+				else if (mapArray[(((int)position.z - 1) * mapSizeX) + position.x] != 1)
+					position.x -= dt * mvSpeed;
+			}
 		}
 	}
 

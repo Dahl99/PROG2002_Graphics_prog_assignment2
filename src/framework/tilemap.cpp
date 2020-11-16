@@ -52,11 +52,15 @@ namespace framework {
 		int zPos = 0;
 		int playerLoc = 0;
 
+		Model wallModel(WALLMODELPATH);
+		Model collectibleModel(COLLECTIBLEMODELPATH);
+
 		// For the the map read in the constructor, check each number and assign possition and colour 
 		//  starting at i = 1 because of mod
 		for (int i = 1; i <= sizeArray; i++)
 		{
 			framework::Vertex temp;
+
 			// The cases are Collectibles, walls, player and ghost respectively
 			switch (array[i - 1])
 			{
@@ -69,24 +73,24 @@ namespace framework {
 				temp.pos.z = (zPos);
 				
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
+				map[i - 1].vertices = collectibleModel.GetVertices();
 
-				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
+				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{
-					if (map[i - 1].model->m_Vertices[j].pos.x < 0)
-						map[i - 1].model->m_Vertices[j].pos.x = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.x = 0.15;
+					if (map[i - 1].vertices.at(j).pos.x < 0)
+						map[i - 1].vertices.at(j).pos.x = -0.15;
+					else map[i - 1].vertices.at(j).pos.x = 0.15;
 
-					if (map[i - 1].model->m_Vertices[j].pos.y < 0)
-						map[i - 1].model->m_Vertices[j].pos.y = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.y = 0.15;
+					if (map[i - 1].vertices.at(j).pos.y < 0)
+						map[i - 1].vertices.at(j).pos.y = -0.15f;
+					else map[i - 1].vertices.at(j).pos.y = 0.15;
 
-					if (map[i - 1].model->m_Vertices[j].pos.z < 0)
-						map[i - 1].model->m_Vertices[j].pos.z = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.z = 0.15;
+					if (map[i - 1].vertices.at(j).pos.z < 0)
+						map[i - 1].vertices.at(j).pos.z = -0.15f;
+					else map[i - 1].vertices.at(j).pos.z = 0.15;
 
 
-					map[i - 1].model->m_Vertices[j].pos += temp.pos;
+					map[i - 1].vertices.at(j).pos += temp.pos;
 					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
 				}
 
@@ -94,7 +98,6 @@ namespace framework {
 				break;
 
 			case 1:
-				
 
 				// Bottom left vertex
 				temp.pos.x = ((i - 1) % sizeX);
@@ -102,11 +105,13 @@ namespace framework {
 				temp.pos.z = (zPos);
 
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = new Model(WALLMODELPATH);
 
-				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
+				map[i - 1].vertices = wallModel.GetVertices();
+
+				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{	
-					map[i - 1].model->m_Vertices[j].pos += temp.pos;
+		
+					map[i - 1].vertices.at(j).pos += temp.pos;
 				}
 
 				break;
@@ -125,23 +130,23 @@ namespace framework {
 
 
 				map[i - 1].pos = temp.pos;
-				map[i - 1].model = new Model(COLLECTIBLEMODELPATH);
+				map[i - 1].vertices = collectibleModel.GetVertices();
 
-				for (int j = 0; j < map[i - 1].model->m_Vertices.size(); j++)
+				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{
-					if (map[i - 1].model->m_Vertices[j].pos.x < 0)
-						map[i - 1].model->m_Vertices[j].pos.x = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.x = 0.15;
+					if (map[i - 1].vertices.at(j).pos.x < 0)
+						map[i - 1].vertices.at(j).pos.x = -0.15f;
+					else map[i - 1].vertices.at(j).pos.x = 0.15;
 
-					if (map[i - 1].model->m_Vertices[j].pos.y < 0)
-						map[i - 1].model->m_Vertices[j].pos.y = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.y = 0.15;
+					if (map[i - 1].vertices.at(j).pos.y < 0)
+						map[i - 1].vertices.at(j).pos.y = -0.15f;
+					else map[i - 1].vertices.at(j).pos.y = 0.15;
 
-					if (map[i - 1].model->m_Vertices[j].pos.z < 0)
-						map[i - 1].model->m_Vertices[j].pos.z = -0.15f;
-					else map[i - 1].model->m_Vertices[j].pos.z = 0.15;
+					if (map[i - 1].vertices.at(j).pos.z < 0)
+						map[i - 1].vertices.at(j).pos.z = -0.15f;
+					else map[i - 1].vertices.at(j).pos.z = 0.15;
 					
-					map[i - 1].model->m_Vertices[j].pos += temp.pos;
+					map[i - 1].vertices.at(j).pos += temp.pos;
 				}
 
 				break;
@@ -153,12 +158,6 @@ namespace framework {
 			if (i % sizeX == 0 && i != 0)
 				zPos++;
 		}
-
-		// Adding vertices and entity positions to entityData
-		/*entityData.vertices.push_back(map[0].botLeft);
-		entityData.vertices.push_back(map[0].botRight);
-		entityData.vertices.push_back(map[0].topLeft);
-		entityData.vertices.push_back(map[0].topRight);*/
 
 		characterPositions.push_back(playerPos); // Player pos gets added first
 	}
@@ -190,14 +189,14 @@ namespace framework {
 		{
 			if(array[i] && array[i] != 2)
 			{
-				for (int j = 0; j < map[i].model->GetVertices().size(); j++)
-					mapVertices.wallVertices.push_back(map[i].model->GetVertices()[j]);
+				for (int j = 0; j < map[i].vertices.size(); j++)
+					mapVertices.wallVertices.push_back(map[i].vertices.at(j));
 				numWalls++;
 			}
 			else
 			{
-				for (int j = 0; j < map[i].model->GetVertices().size(); j++)
-					mapVertices.collectibleVertices.push_back(map[i].model->GetVertices()[j]);
+				for (int j = 0; j < map[i].vertices.size(); j++)
+					mapVertices.collectibleVertices.push_back(map[i].vertices.at(j));
 				auto x = mapVertices.wallVertices.max_size();
 				numCollecs++;
 			}
@@ -219,9 +218,9 @@ namespace framework {
 	{
 		// Create the return value container
 		IndiceData indices;
-		Model collmodel = Model(COLLECTIBLEMODELPATH);
+		Model collmodel(COLLECTIBLEMODELPATH);
 		
-		int stride = collmodel.m_Vertices.size();
+		int stride = collmodel.GetVertices().size();
 		for (uint32_t i = 0; i < numCollecs; i++)
 		{
 			for (int j = 0; j < collmodel.GetIndices().size(); j++)
@@ -230,9 +229,9 @@ namespace framework {
 			}
 		}
 
-		Model wallmodel = Model(WALLMODELPATH);
+		Model wallmodel(WALLMODELPATH);
 
-		stride = wallmodel.m_Vertices.size();
+		stride = wallmodel.GetVertices().size();
 		for (uint32_t i = 0; i < numWalls; i++)
 		{
 			for (int j = 0; j < wallmodel.GetIndices().size(); j++)
