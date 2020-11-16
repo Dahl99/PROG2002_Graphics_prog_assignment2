@@ -28,7 +28,7 @@
 GLFWwindow* initWindow();
 
 void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt);
-bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int yPos);
+bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int zPos);
 
 
 // Error function for GLFW
@@ -66,7 +66,8 @@ int main()
 
 
     // Reading and creating the map
-    framework::Map map1(framework::LEVELPATH0);
+    //framework::Map map1(framework::LEVELPATH0);
+    framework::Map map1(framework::LEVELPATH1);
     map1.PrintMap();
 
     static framework::Renderer renderer;
@@ -114,7 +115,8 @@ int main()
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
 
-    glm::vec3 viewPos(14.f, 20.f, -10.f);
+
+    glm::vec3 viewPos(14.f, 30.f, -6.f);
 
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
@@ -199,13 +201,19 @@ int main()
         ImGui::Text("Current score: %d", pelletsCollected * framework::COLLECTIBLESCORE);
         ImGui::End();
 
-        //                              Draw calls
+        if (removeCollectible(vertices.collectibleVertices, pacmanEntities[0]->GetPosition().x, pacmanEntities[0]->GetPosition().z - 1.1f))
+        {
+            pelletsCollected++;
+            collVbo.UpdateData(vertices.collectibleVertices);
+        }
+        
+
 
         //collVbo.UpdateData(vertices.collectibleVertices);
         //renderer.Draw(collVao, collIbo, tileShader);
  
         //int x = (int)map1.GetArray()[(pacmanEntities[0]->GetPosition().z + 1) * map1.GetSizeX()];
-        // Move uprward
+        // Move upward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 
             if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x +          0.1)] != 1 &&
@@ -378,34 +386,25 @@ void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt)
 
 // Recieves player position and the collectibles container, goes through the container until it finds the element with
 //  the correct data and removes the 4 vertices from that one;
-bool removeCollectible(std::vector<framework::Vertex> &collectibles, int xPos, int yPos)
+bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int zPos)
 {
-    //// Goes through every collectible
-    //for (int i = 0; i < collectibles.size(); i+=4)
-    //{
-    //    glm::vec2 position = collectibles[i].pos;
-    //    int x = position.x, y = position.y;
-    //    
-    //    // If position is the same as player and not black, paint it black
-    //    if (x == xPos && y == yPos && collectibles[i].col.x != 0)
-    //    {
-    //        collectibles[i].col.x = 0;
-    //        collectibles[i].col.y = 0;
-    //        collectibles[i].col.z = 0;
-    //        
-    //        collectibles[(i + 1)].col.x = 0;
-    //        collectibles[(i + 1)].col.y = 0;
-    //        collectibles[(i + 1)].col.z = 0;
-    //        
-    //        collectibles[(i + 2)].col.x = 0;
-    //        collectibles[(i + 2)].col.y = 0;
-    //        collectibles[(i + 2)].col.z = 0;
-    //        
-    //        collectibles[(i + 3)].col.x = 0;
-    //        collectibles[(i + 3)].col.y = 0;
-    //        collectibles[(i + 3)].col.z = 0;
-    //        return 1;
-    //    }
-    //}
-    return 0;
+    for (int i = 0; i < collectibles.size(); i += 24)
+    {
+        glm::vec3 position = collectibles.at(i).pos;
+        int x = position.x, z = position.z;
+
+        if (x == xPos && z == zPos && collectibles.at(i).pos.x != 500.f)
+        {
+            for (int j = 0; j < 24; j++)
+            {
+                collectibles.at(i + j).pos.x = 500.f;
+                collectibles.at(i + j).pos.y = 500.f;
+                collectibles.at(i + j).pos.z = 500.f;
+            }
+
+            return true;
+        }
+    }
+
+    return false;
 }

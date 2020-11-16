@@ -7,6 +7,7 @@
 namespace framework {
 
 	const std::string LEVELPATH0 = "../res/levels/level0";
+	const std::string LEVELPATH1 = "../res/levels/level1";
 
 	const std::string PACMANMODELPATHS[] = { "../res/models/pacman/pacman.obj",
 											 "../res/models/pacman/pacman_closed.obj" };

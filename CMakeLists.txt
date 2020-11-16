@@ -71,6 +71,10 @@ add_executable(Assignment2
 	
 	src/framework/globals.hpp
 
+	src/ghost.hpp
+	src/ghost.cpp
+
+
 	external/imgui/imconfig.h
     external/imgui/imgui.cpp
     external/imgui/imgui_draw.cpp
