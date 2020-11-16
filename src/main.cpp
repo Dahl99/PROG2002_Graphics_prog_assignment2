@@ -116,7 +116,6 @@ int main()
 
 
     glm::vec3 viewPos(14.f, 30.f, -6.f);
-
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
@@ -380,15 +379,16 @@ void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt)
 //  the correct data and removes the 4 vertices from that one;
 bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int zPos)
 {
-    for (int i = 0; i < collectibles.size(); i += 24)
+    for (int i = 0; i < collectibles.size(); i += 24) // Looping through all collectible tiles
     {
         glm::vec3 position = collectibles.at(i).pos;
         int x = position.x, z = position.z;
 
-        if (x == xPos && z == zPos && collectibles.at(i).pos.x != 500.f)
+        if (x == xPos && z == zPos) // If collectible has same position as player
         {
-            for (int j = 0; j < 24; j++)
+            for (int j = 0; j < 24; j++) // Looping through all vertices related to tile
             {
+                // Doing something cheap by moving them elsewhere
                 collectibles.at(i + j).pos.x = 500.f;
                 collectibles.at(i + j).pos.y = 500.f;
                 collectibles.at(i + j).pos.z = 500.f;

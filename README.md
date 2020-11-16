@@ -6,7 +6,7 @@ This project contains a 3D remake of Pac-Man in C++ using OpenGL 4.3. In the gam
 There's also 4 ghosts roaming around the map and trying to catch you. All of the ghosts and Pac-Man are loaded using a model, but only Pac-Man is animated using a second model.
 The level is created using a tilemap and with models that are batched together into 1 draw call for walls and 1 for pellets. The current score is also being kept track of
 and displayed in the upper left corner. The soundtrack from the original game is also playing in the background while the game is running. Being caught by a ghost causes
-the game to just *terminate*. The game can also be terminated by pressing *escape*. Lighting is done by having ghosts and pac-man as point lights using the phong lighting model with attenuation.
+the game to just *terminate*. The game can also be terminated by pressing *escape*. Lighting is done by having ghosts and pac-man as point lights using the Blinn-Phong lighting model with attenuation.
 
 ## Built With
 
