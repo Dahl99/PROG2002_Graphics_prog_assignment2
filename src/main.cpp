@@ -73,6 +73,7 @@ int main()
     static framework::Renderer renderer;
     renderer.EnableBlending();
     renderer.EnableDepthTesting();
+    renderer.EnableSRGBFramebuffer();
     renderer.SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
     // Initializing music
