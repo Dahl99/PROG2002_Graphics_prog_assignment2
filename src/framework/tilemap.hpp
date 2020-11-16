@@ -11,7 +11,7 @@ namespace framework{
 		glm::vec3 pos;
 		glm::vec3 nor;
 
-		Model* model;
+		std::vector<Vertex> vertices;
 	};
 
 	class Map {
