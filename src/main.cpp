@@ -24,7 +24,7 @@
 #include "framework/entity.hpp"
 
 // Function declarations
-GLFWwindow* initWindow(const std::string& title);
+GLFWwindow* initWindow(const std::string& title = "Window");
 
 void updateDeltaTime(GLfloat& dt, GLfloat& ct, GLfloat& lt);
 bool removeCollectible(std::vector<framework::Vertex>& collectibles, int xPos, int zPos);
@@ -101,7 +101,6 @@ int main()
     framework::Texture wallTex(framework::WALLPICTUREPATH);
 
     //                      Preparing collectibles
-
     framework::VertexArray collVao;
     framework::VertexBuffer collVbo(vertices.collectibleVertices);
     collVao.AddBuffer(collVbo, vbl);
@@ -117,7 +116,7 @@ int main()
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
-    // Creating 
+    // Creating shaders and setting most uniforms
     framework::Shader shader(framework::VERTSHADERPATH, framework::FRAGSHADERPATH);
     framework::Shader lightSrcShader(framework::VERTLIGHTSRCSHADERPATH, framework::FRAGLIGHTSRCSHADERPATH);
 
@@ -139,29 +138,23 @@ int main()
 
     const auto& characterPositions = map1.GetPGPos();    // Getting player and ghost positions
 
-    // Loading textures for pacman models
+    // Loading both pacman models and their texture
     std::shared_ptr<framework::Texture> pacmanTextures[2];
-    for (int i = 0; i < 2; i++)
-        pacmanTextures[i] = std::make_shared<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
-
-    // Loading both pacman models
     std::shared_ptr<framework::Entity> pacmanEntities[2];
     for (int i = 0; i < 2; i++)
     {
+        pacmanTextures[i] = std::make_shared<framework::Texture>(framework::PACMANTEXTUREPATHS[i]);
         pacmanEntities[i] = std::make_shared<framework::Entity>(characterPositions.front(), framework::PACMANMODELPATHS[i]);
         pacmanEntities[i]->SetScale(glm::vec3(0.5f));
     }
 
-    // Loading textures for ghosts
+    // Loading ghosts and their textures
     std::shared_ptr<framework::Texture> ghostTextures[framework::NUMGHOSTS];
-    for (int i = 0; i < framework::NUMGHOSTS; i++)
-        ghostTextures[i] = std::make_shared<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
-
-    // Creating ghosts using model
-    std::shared_ptr<framework::Model> ghostModel = std::make_shared<framework::Model>(framework::GHOSTMODELPATH);
+    std::unique_ptr<framework::Model> ghostModel = std::make_unique<framework::Model>(framework::GHOSTMODELPATH);
     std::shared_ptr<framework::Entity> ghosts[framework::NUMGHOSTS];
     for (int i = 0; i < framework::NUMGHOSTS; i++)
     {
+        ghostTextures[i] = std::make_shared<framework::Texture>(framework::GHOSTTEXTUREPATHS[i]);
         ghosts[i] = std::make_shared<framework::Entity>(characterPositions.at(i+1), ghostModel->GetVertices(), ghostModel->GetIndices());
         ghosts[i]->SetScale(glm::vec3(0.5f));
     }
