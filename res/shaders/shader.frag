@@ -55,13 +55,13 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos)
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * light.color;
 
-	/** Specular Lighting */
+	/** Blinn-Phong Specular Lighting */
 	float specularStrength = 0.5;
-	int shininess = 32;
+	int shininess = 48;
 	vec3 viewDir = normalize(viewPos - fragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specular = specularStrength * spec * light.color;
+	vec3 halfwayDir = normalize(lightDir + viewDir);
+	float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
+	vec3 specular = spec * light.color;
 
 	/** Attenuation */
 	float distance = length(light.position - fragPos);
