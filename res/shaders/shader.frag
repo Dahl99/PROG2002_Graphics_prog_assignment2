@@ -31,41 +31,40 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos);
 void main()
 {
 	/** Texture */
-	vec4 texColor = texture(u_Texture, v_TexCoords);
+	vec3 texColor = pow(texture(u_Texture, v_TexCoords).rgb, vec3(2.2));
 
 	/** Calculating lighting from all point lights */
-	vec3 phong;
+	vec3 blinn_phong = vec3(0.0);
 	for(int i = 0; i < NR_POINT_LIGHTS; i++)
-		phong += CalcPointLight(u_PointLights[i], v_Normal, v_FragPos, u_ViewPos);
+		blinn_phong += CalcPointLight(u_PointLights[i], normalize(v_Normal), v_FragPos, u_ViewPos);
 
-	vec3 result = (phong.x + phong.y + phong.z) * texColor.xyz;
+	texColor *= blinn_phong;
+	texColor = pow(texColor, vec3(1.0/2.2));
 
-	FragColor = vec4(result, 1.0);
+	FragColor = vec4(texColor, 1.0);
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewPos)
 {
    /** Ambient Lighting */
-	float ambientStrength = 0.1;
+	float ambientStrength = 0.00000000000000000001;
 	vec3 ambient = ambientStrength * light.color;
 
 	/** Diffuse Lighting */
-	vec3 norm = normalize(v_Normal);
 	vec3 lightDir = normalize(light.position - fragPos);
-	float diff = max(dot(norm, lightDir), 0.0);
+	float diff = max(dot(normal, lightDir), 0.0);
 	vec3 diffuse = diff * light.color;
 
-	/** Specular Lighting */
-	float specularStrength = 0.5;
-	int shininess = 32;
+	/** Blinn-Phong Specular Lighting */
+	int shininess = 64;
 	vec3 viewDir = normalize(viewPos - fragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specular = specularStrength * spec * light.color;
+	vec3 halfwayDir = normalize(lightDir + viewDir);
+	float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
+	vec3 specular = spec * light.color;
 
 	/** Attenuation */
 	float distance = length(light.position - fragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+	float attenuation = 1.0 / (distance * distance);
 
 	ambient  *= attenuation;
 	diffuse  *= attenuation;

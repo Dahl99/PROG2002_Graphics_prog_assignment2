@@ -27,6 +27,11 @@ namespace framework
 		glEnable(GL_DEPTH_TEST);
 	}
 
+	void Renderer::EnableSRGBFramebuffer() const
+	{
+		glEnable(GL_FRAMEBUFFER_SRGB);
+	}
+
 	void Renderer::SetClearColor(glm::vec4& clearColor) const
 	{
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
