@@ -116,7 +116,7 @@ int main()
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
 
 
-    glm::vec3 viewPos(14.f, 30.f, -6.f);
+    glm::vec3 viewPos(14.f, 34.f, 0.f);
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
