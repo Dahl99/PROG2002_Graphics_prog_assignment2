@@ -18,6 +18,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		if (map[(int)(((int)(GetPosition().z) * sizeX) + (int)(GetPosition().x))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
+			SetRotation(270.f);
 		}
 		else // Change dir
 		{
@@ -32,6 +33,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		if (map[(int)(((int)(GetPosition().z - 0.8) * sizeX) + (int)(GetPosition().x -1))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
+			SetRotation(180.f);
 
 		}
 		else // Change dir
@@ -47,6 +49,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		if (map[(int)(((int)(GetPosition().z - 1.1) * sizeX) + (int)(GetPosition().x))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
+			SetRotation(90.f);
 
 		}
 		else //change dir
@@ -62,6 +65,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		if (map[(int)(((int)(GetPosition().z - 1) * sizeX) + (int)(GetPosition().x + 0.1))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
+			SetRotation(0.f);
 
 		}
 		else //change dir
