@@ -202,7 +202,7 @@ namespace framework {
 		// Adds ghost positions
 		for (int i = 0; i < NUMGHOSTS; i++)
 		{
-			const auto& temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 24)].pos;
+			const auto& temp = mapVertices.collectibleVertices.at((numCollecs / 4) + (i * 24)).pos;
 
 			characterPositions.push_back(glm::vec3(temp.x, 1.6f, temp.z + 1));
 		}

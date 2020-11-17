@@ -67,6 +67,11 @@ int main()
 
     // Reading and creating the map
     framework::Map map1(framework::LEVELPATH0);
+
+    // Additional level made as example for proof of the code handling different maps. It is not optimal as there was no\
+        optimal view pos calculation we could find that would work for all mapsizes. there is currently one for the extra map\
+        and the default one for the standard map
+
     //framework::Map map1(framework::LEVELPATH1);
     map1.PrintMap();
 
@@ -114,9 +119,12 @@ int main()
      *  As well as view and projection matrices for everything
      */
     auto tileModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.f));
+    glm::vec3 viewPos;
+    
+    if (map1.GetArray().size() == (30 * 40))
+        viewPos = glm::vec3(14.f, 44.f, 0.f);
+    else viewPos = glm::vec3(14.f, 34.f, 0.f);
 
-
-    glm::vec3 viewPos(14.f, 34.f, 0.f);
     auto view = glm::lookAt(viewPos, { 14.f, 1.f, 18.f }, { 0.f, 1.f, 0.f });
     auto proj = glm::perspective(glm::radians(45.f), (float)framework::WINDOWSIZEX / (float)framework::WINDOWSIZEY, 0.01f, 900.f);
 
@@ -202,10 +210,12 @@ int main()
 
         if (removeCollectible(vertices.collectibleVertices, pacmanEntities[0]->GetPosition().x, pacmanEntities[0]->GetPosition().z - 1.1f))
         {
+            
             pelletsCollected++;
             collVbo.UpdateData(vertices.collectibleVertices);
             if (pelletsCollected == map1.GetNumCollecs())
                 exitFlag = true;
+      
         }
  
         for (int i = 0; i < framework::NUMGHOSTS; i++)
@@ -214,17 +224,20 @@ int main()
 
         // Move upward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x +          0.1)] != 1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
+            if (pacmanEntities[0]->GetPosition().z < map1.GetSizeY())
             {
-                pacmanEntities[0]->Move(dt, framework::Direction::FORWARD);
-                pacmanEntities[0]->SetRotation(270.f);
+                if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.1)] != 1 &&
+                    map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
+                {
+                    pacmanEntities[0]->Move(dt, framework::Direction::FORWARD);
+                    pacmanEntities[0]->SetRotation(270.f);
+                }
             }
         }
         // Move downward
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 
+            if (pacmanEntities[0]->GetPosition().z > 0)
             if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x)] != 1 &&
                 map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 1) * map1.GetSizeX()) + ((int)pacmanEntities[0]->GetPosition().x + 0.9)] != 1)
             {
