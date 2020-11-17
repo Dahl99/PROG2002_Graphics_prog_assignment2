@@ -229,7 +229,7 @@ int main()
             if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
                 map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] != 1)
             {
-                pacmanEntities[0]->Move(dt, framework::Direction::LEFT);
+                pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
                 pacmanEntities[0]->SetRotation(180.f);
             }
         }
@@ -241,7 +241,7 @@ int main()
                 map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x + 0.1)]
                 != 1)
             {
-                pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
+                pacmanEntities[0]->Move(dt, framework::Direction::LEFT);
                 pacmanEntities[0]->SetRotation(0.f);
             }   
         }
@@ -277,7 +277,8 @@ int main()
         for (int i = 0; i < framework::NUMGHOSTS; i++)
         {
             ghostTextures[i]->Bind();
-            ghosts[i]->GhostMovement(pacmanEntities[0]->GetPosition(), map1.GetArray(), map1.GetSizeX(), dt);
+            //ghosts[i]->GhostMovement(pacmanEntities[0]->GetPosition(), map1.GetArray(), map1.GetSizeX(), dt);
+            ghosts[i]->Behaviour(map1.GetArray(), map1.GetSizeX(), dt);
             ghosts[i]->Draw(shader, view, proj);
         }
 

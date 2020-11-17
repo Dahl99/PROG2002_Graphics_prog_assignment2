@@ -54,3 +54,8 @@ This project was developed by:
 * Daniel Dahl
 
 ## Acknowledgements
+
+Because of our decision to have the game take place on the x-z plane some one axis became inverted.
+We could chose to invert either the y axis which would cause the map to flip along the x axis, making it effectively upside down, or
+we could invert the x axis, which was what we chose, fliping the game along the y axis. 
+This has no visual effect of the game, but does mean that the rightmost part of our map is 0  while the leftmost is the sizeX value of the map.
