@@ -177,8 +177,12 @@ int main()
     window_flags |= ImGuiWindowFlags_NoDecoration;
     window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-
-    while (!glfwWindowShouldClose(window))
+    bool exitFlag = false;
+//------------------------------------------------------------------------------------------
+//                                  Game loop
+//------------------------------------------------------------------------------------------
+    
+    while (!glfwWindowShouldClose(window) && exitFlag != true)
     {
         //                   Preparation
         updateDeltaTime(dt, curTime, lastTime);
@@ -200,8 +204,13 @@ int main()
         {
             pelletsCollected++;
             collVbo.UpdateData(vertices.collectibleVertices);
+            if (pelletsCollected == map1.GetNumCollecs())
+                exitFlag = true;
         }
  
+        for (int i = 0; i < framework::NUMGHOSTS; i++)
+            if (ghosts[i]->CollisionCheck(pacmanEntities[0]->GetPosition()))
+                exitFlag = true;
 
         // Move upward
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -225,12 +234,15 @@ int main()
         }
         // Strafe right
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-
-            if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
-                map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] != 1)
+            if (pacmanEntities[0]->GetPosition().x - 1 > 0) 
             {
-                pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
-                pacmanEntities[0]->SetRotation(180.f);
+                if (map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.1) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] !=     1 &&
+                    map1.GetArray()[(int)((int)(pacmanEntities[0]->GetPosition().z - 0.9) * map1.GetSizeX()) + (int)(pacmanEntities[0]->GetPosition().x - 1)] != 1)
+                {
+                    pacmanEntities[0]->Move(dt, framework::Direction::RIGHT);
+                    pacmanEntities[0]->SetRotation(180.f);
+                }
+
             }
         }
         // Strafe left

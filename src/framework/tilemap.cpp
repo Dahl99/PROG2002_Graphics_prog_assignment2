@@ -67,7 +67,7 @@ namespace framework {
 			case 0:	// Each vertice of an collectible gets added or subtracted a const
 					//  to the vertice positions in order to reduce the size of the collectible
 				
-				// Bottom left vertex
+				// Base position
 				temp.pos.x = ((i - 1) % sizeX);
 				temp.pos.y = 0.0;
 				temp.pos.z = (zPos);
@@ -75,6 +75,7 @@ namespace framework {
 				map[i - 1].pos = temp.pos;
 				map[i - 1].vertices = collectibleModel.GetVertices();
 
+				// Adjusting the position of each vertex of the model
 				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{
 					if (map[i - 1].vertices.at(j).pos.x < 0)
@@ -91,7 +92,6 @@ namespace framework {
 
 
 					map[i - 1].vertices.at(j).pos += temp.pos;
-					//float tempo = map[i - 1].model->m_Vertices[j].pos.y;
 				}
 
 
@@ -108,6 +108,7 @@ namespace framework {
 
 				map[i - 1].vertices = wallModel.GetVertices();
 
+				// Adjusting the position of each vertex of the model
 				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{	
 		
@@ -118,9 +119,6 @@ namespace framework {
 
 			case 2: // Sets player pos if tile type is 2, also adds collectible vertices
 
-
-				
-
 				// Bottom left vertex
 				temp.pos.x = ((i - 1) % sizeX);
 				temp.pos.y = 0;
@@ -128,10 +126,10 @@ namespace framework {
 
 				playerPos = glm::vec3((float)((i - 1)% sizeX), 1.6f, (float)zPos + 1.0f);
 
-
 				map[i - 1].pos = temp.pos;
 				map[i - 1].vertices = collectibleModel.GetVertices();
 
+				// Adjusting the position of each vertex of the model
 				for (int j = 0; j < map[i - 1].vertices.size(); j++)
 				{
 					if (map[i - 1].vertices.at(j).pos.x < 0)
@@ -148,7 +146,6 @@ namespace framework {
 					
 					map[i - 1].vertices.at(j).pos += temp.pos;
 				}
-
 				break;
 			default:
 				break;
@@ -202,7 +199,7 @@ namespace framework {
 			}
 		}
 
-
+		// Adds ghost positions
 		for (int i = 0; i < NUMGHOSTS; i++)
 		{
 			const auto& temp = mapVertices.collectibleVertices[(numCollecs / 4) + (i * 24)].pos;
