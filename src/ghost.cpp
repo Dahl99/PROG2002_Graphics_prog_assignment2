@@ -26,7 +26,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		}
 		break;
 	case 1:
-		if (map[(int)(((int)(GetPosition().z - 1) * sizeX) + (int)(GetPosition().x -1))] != 1)
+		if (map[(int)(((int)(GetPosition().z - 0.8) * sizeX) + (int)(GetPosition().x -1))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
 
@@ -52,7 +52,7 @@ void Ghost::Behaviour(std::vector<int> & map, int sizeX, GLfloat & dt)
 		}
 		break;
 	case 3:
-		if (map[(int)(((int)(GetPosition().z - 1) * sizeX) + (int)(GetPosition().x))] != 1)
+		if (map[(int)(((int)(GetPosition().z - 1) * sizeX) + (int)(GetPosition().x + 0.1))] != 1)
 		{
 			Move(dt, framework::Direction(dir));
 
